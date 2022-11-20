@@ -1,14 +1,16 @@
 <template>
-    <div>Bill.vue
-    <Nav/>
-    </div>
+    <Layout>
+        Bill.vue
+    </Layout>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-
-  @Component
+  import Layout from '@/components/Layout.vue';
+  @Component({
+    components: {Layout}
+  })
   export default class Bill extends Vue {
 
   }

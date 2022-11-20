@@ -1,14 +1,16 @@
 <template>
-    <div>Form.vue
-    <Nav/>
-    </div>
+    <Layout>
+        Form.vue
+    </Layout>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-
-  @Component
+  import Layout from '@/components/Layout.vue';
+  @Component({
+    components: {Layout}
+  })
   export default class Form extends Vue {
 
   }
