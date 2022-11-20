@@ -1,14 +1,14 @@
 <template>
     <div class="nav">
-        <router-link to="/home" class="item">
+        <router-link to="/home" class="item" active-class="selected">
             <Icon name="home" />
             主页</router-link>
 
-        <router-link to="/bill" class="item">
+        <router-link to="/bill" class="item" active-class="selected">
             <Icon name="bill" />
             账单</router-link>
 
-        <router-link to="/form" class="item">
+        <router-link to="/form" class="item" active-class="selected">
             <Icon name="form" />
             报表
         </router-link>
@@ -30,7 +30,7 @@
 
 <style lang="scss" scoped>
     .nav {
-        background: black;
+        background: #0F0F0F;
         display: flex;
         font-size: 12px;
         padding-top: 8px ;
@@ -41,10 +41,15 @@
             align-items: center;
             display: flex;
             flex-direction: column;
+            color: #c6c6c6;
             >.icon{
                 width: 32px;
                 height: 32px;
             }
+
+        }
+        > .item.selected{
+            color: white;
         }
     }
 </style>
