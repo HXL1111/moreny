@@ -1,6 +1,6 @@
 <template>
         <div class="nav-wrapper">
-            <div class="content">
+            <div class="tagList">
                 <slot/>
             </div>
             <Nav/>
@@ -22,7 +22,7 @@
         display: flex;
         flex-direction: column;
         height: 100vh;
-        > .content {
+        > .tagList {
             overflow: auto;
             flex-grow: 1;
         }
