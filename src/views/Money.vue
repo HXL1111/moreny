@@ -1,7 +1,7 @@
 <template>
     <div class="money">
        <Type/>
-        <Tag/>
+        <Tag :tag-list="tags"/>
         <NumberPad/>
     </div>
 </template>
@@ -16,7 +16,7 @@
     components: {Type, NumberPad, Tag}
   })
   export default class Money extends Vue {
-
+    tags = ['衣','食','住','行']
   }
 </script>
 

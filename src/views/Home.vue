@@ -12,8 +12,8 @@
   import Layout from '@/components/Layout.vue';
   import AmountDisplay from '@/components/AmountDisplay.vue';
   import Button from '@/components/Button.vue';
-  import Content from '@/components/TagList.vue';
-  import TagList from '@/components/TagList.vue';
+  import Content from '@/components/TagContent.vue';
+  import TagList from '@/components/TagContent.vue';
 
   @Component({
     components: {TagList, Content, Button, AmountDisplay, Layout}
