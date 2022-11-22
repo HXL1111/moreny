@@ -2,7 +2,10 @@
     <div class="tagList-wrapper">
         <ol class="tagList">
             <li v-for="tag in tagList" :key="tag">
-                <span class="tag" :class="{}">{{tag.slice(0,1)}}</span>
+                <span class="tag"
+                      @click="select(tag)"
+                      :class="{selected: selectedTags.indexOf(tag)>=0}">{{tag.slice(0,1)}}
+                </span>
                 <span class="tagName">{{tag}}</span>
             </li>
             <li>
@@ -23,7 +26,16 @@
   })
   export default class Tag extends Vue {
     @Prop() tagList: string[] | undefined;
+    selectedTags:string[] = []
+    select(tag:string): void{
+      const index = this.selectedTags.indexOf(tag)
+      if(index>=0){
+        this.selectedTags.splice(index,1)
+      }else {
+        this.selectedTags.push(tag)
+      }
 
+    }
     createTag(): void {
       const name = window.prompt('请输入标签名');
       if (!name) {
@@ -72,6 +84,10 @@
                     border-radius: 50%;
                     height: 40px;
                     width: 40px;
+                    &.selected{
+                        background: #dddedf;
+                        color: black;
+                    }
                 }
 
                 > .tagName {
