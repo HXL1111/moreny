@@ -13,8 +13,8 @@
             <li><span class="tag">行</span>
                 <span class="tagName">出行</span>
             </li>
-            <li><span class="tag">设置</span>
-                <span class="tagName">设置</span>
+            <li><span class="tag"><Icon name="add"/></span>
+                <span class="tagName">新增</span>
             </li>
         </ol>
     </div>
@@ -23,8 +23,10 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-
-  @Component
+  import Icon from '@/components/Icon.vue';
+  @Component({
+    components: {Icon}
+  })
   export default class Tag extends Vue {
 
   }
@@ -52,16 +54,12 @@
             line-height: 40px;
             justify-content: center;
             align-items: center;
-
             > .tag {
-
                 background: #515151;
                 border-radius: 50%;
                 height: 40px;
                 width: 40px;
-
             }
-
             > .tagName {
                 transform: scale(0.8);
                 font-size: 12px;

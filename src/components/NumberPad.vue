@@ -51,7 +51,7 @@
                 word-break: break-all;
                 overflow: hidden;
             }
-            >div{
+            >span{
                 padding: 0 12px;
                 text-align: center;
                 line-height: 52px;

@@ -7,7 +7,7 @@
             <span :class="{selected: type === '+'}"
                   @click="selectType('+')">收入</span>
         </div>
-        <div class="cancel">取消</div>
+        <div class="cancel" @click="goBack">取消</div>
     </div>
 
 
@@ -26,6 +26,10 @@
         throw new Error('type is unknown');
       }
       return this.type = type;
+    }
+
+    goBack(): void{
+      this.$router.back()
     }
   }
 </script>
