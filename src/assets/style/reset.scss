@@ -10,6 +10,9 @@ a{
 button, input {
   font: inherit;
 }
+:focus {
+  outline: none;
+}
 ol,li{
   list-style: none;
 }

@@ -4,4 +4,11 @@ $color-highLight: #FFFFFF;
 $color-background: #252525;
 $leftPadding: 8px;
 
+%clearFix{
+  &::after{
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
 

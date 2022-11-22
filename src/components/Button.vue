@@ -1,9 +1,12 @@
 <template>
-    <div class="makeAccount">
-        <button>
-            记一笔
-        </button>
-    </div>
+    <router-link to="home/money">
+        <div class="makeAccount">
+            <button>
+                记一笔
+            </button>
+        </div>
+    </router-link>
+
 </template>
 
 <script lang="ts">

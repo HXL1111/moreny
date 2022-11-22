@@ -13,7 +13,70 @@
         </div>
         <ol class="tagList">
             <li>
-                <div class="tag">
+                <div class="tagList">
+                    <span class="logo">衣</span>
+                    <span class="name">衣服</span>
+                </div>
+                <div class="money">￥300.00</div>
+            </li>
+            <li>
+                <div class="tagList">
+                    <span class="logo">衣</span>
+                    <span class="name">衣服</span>
+                </div>
+                <div class="money">￥300.00</div>
+            </li>
+            <li>
+                <div class="tagList">
+                    <span class="logo">衣</span>
+                    <span class="name">衣服</span>
+                </div>
+                <div class="money">￥300.00</div>
+            </li>
+            <li>
+                <div class="tagList">
+                    <span class="logo">衣</span>
+                    <span class="name">衣服</span>
+                </div>
+                <div class="money">￥300.00</div>
+            </li>
+            <li>
+                <div class="tagList">
+                    <span class="logo">衣</span>
+                    <span class="name">衣服</span>
+                </div>
+                <div class="money">￥300.00</div>
+            </li>
+            <li>
+                <div class="tagList">
+                    <span class="logo">衣</span>
+                    <span class="name">衣服</span>
+                </div>
+                <div class="money">￥300.00</div>
+            </li>
+            <li>
+                <div class="tagList">
+                    <span class="logo">衣</span>
+                    <span class="name">衣服</span>
+                </div>
+                <div class="money">￥300.00</div>
+            </li>
+            <li>
+                <div class="tagList">
+                    <span class="logo">衣</span>
+                    <span class="name">衣服</span>
+                </div>
+                <div class="money">￥300.00</div>
+            </li>
+            <li>
+                <div class="tagList">
+                    <span class="logo">衣</span>
+                    <span class="name">衣服</span>
+                </div>
+                <div class="money">￥300.00</div>
+            </li>
+            <li>
+                <div class="tagList">
                     <span class="logo">衣</span>
                     <span class="name">衣服</span>
                 </div>
@@ -38,15 +101,12 @@
 
 
     .content {
-
         padding: 0 18px;
 
         > .threeDay {
             color: $color-highLight;
             padding-bottom: 14px;
         }
-
-        flex-grow: 1;
 
         > .content-wrapper {
             font-size: 10px;
@@ -68,8 +128,9 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                margin-bottom: 16px;
 
-                > .tag {
+                > .tagList {
                     display: flex;
                     align-items: center;
                     color: $color-highLight;
