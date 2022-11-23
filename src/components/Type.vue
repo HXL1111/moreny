@@ -15,17 +15,22 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import {Component, Watch} from 'vue-property-decorator';
 
   @Component
   export default class Type extends Vue {
     type = '-';
 
-    selectType(type: string) : string{
+    selectType(type: string) : void{
       if (type !== '-' && type !== '+') {
         throw new Error('type is unknown');
       }
-      return this.type = type;
+      this.type = type;
+
+    }
+    @Watch('type')
+    onTypeChanged(value:string): void{
+      this.$emit('update:value',value)
     }
 
     goBack(): void{

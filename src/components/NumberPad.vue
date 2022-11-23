@@ -3,8 +3,8 @@
         <label class="notes">
             <input type="text"
                    placeholder="请输入备注信息（最多150字）"
-                   v-model="value">
-            <span>{{output}}</span>
+                   v-model="notesValue">
+            <span>{{outputValue}}</span>
         </label>
         <div class="buttons">
             <button @click="inputContent">1</button>
@@ -18,8 +18,8 @@
             <button @click="inputContent">7</button>
             <button @click="inputContent">8</button>
             <button @click="inputContent">9</button>
-            <button class="save">保存</button>
-            <button >再记</button>
+            <button @click="save" class="save">保存</button>
+            <button @click="makeAgain">再记</button>
             <button @click="inputContent">0</button>
             <button @click="inputContent">.</button>
         </div>
@@ -29,46 +29,63 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
+  import dayjs from 'dayjs';
 
 
   @Component
   export default class NumberPad extends Vue {
-    value = '';
-    output = '0';
+    notesValue = '';
+    outputValue = '0';
+    createAt = '';
 
 
     inputContent(event: MouseEvent): string | void {
       const input = (event.target as HTMLButtonElement).textContent as string;
-      if (this.output.length >= 8) { return window.alert('金额长度不能超过8位'); }
-      if (this.output === '0' && input !== '.') {
-        this.output = input;
-      } else if (this.output.indexOf('.') >= 0 && input === '.') {
+      if (this.outputValue.length >= 8) { return window.alert('金额长度不能超过8位'); }
+      if (this.outputValue === '0' && input !== '.') {
+        this.outputValue = input;
+      } else if (this.outputValue.indexOf('.') >= 0 && input === '.') {
         return;
       } else {
-        this.output += input;
+        this.outputValue += input;
       }
-      return this.output;
+      return this.outputValue;
     }
 
-    remove():void{
-      if(this.output.length === 1){
-        this.output = '0'
-      }else {
-        this.output = this.output.slice(0,-1)
+    remove(): void {
+      if (this.outputValue.length === 1) {
+        this.outputValue = '0';
+      } else {
+        this.outputValue = this.outputValue.slice(0, -1);
       }
     }
 
-    clear():void{
-      this.output = '0'
+    clear(): void {
+      this.outputValue = '0';
     }
 
-    // save(){
-    //
-    // }
-    //
-    // makeAgain(){
-    //
-    // }
+    createNewAt(): void {
+      this.createAt = JSON.stringify(dayjs());
+    }
+
+    collectData(): void {
+      this.$emit('update:notes', this.notesValue);
+      this.$emit('update:amount', this.outputValue);
+      this.createNewAt();
+      this.$emit('update:createAt', this.createAt);
+      this.notesValue = '';
+      this.outputValue = '0';
+
+    }
+
+    save(): void {
+      this.collectData();
+      // this.$router.back();
+    }
+
+    makeAgain(): void {
+      this.collectData();
+    }
   }
 
 </script>

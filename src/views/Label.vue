@@ -18,7 +18,7 @@
         </router-link>
 
         <div class="createTag-wrapper">
-            <Button >新建标签</Button>
+            <Button @click="createTag">新建标签</Button>
         </div>
     </div>
 </template>
@@ -32,12 +32,22 @@
     components: {Icon}
   })
   export default class editLabel extends Vue {
-    tags = ['衣服', '食', '住', '行'];
 
-    goBack():void{
-      this.$router.back()
+    get tags(): void {
+      return this.$store.state.tagList;
     }
 
+    beforeCreate() :void{
+      this.$store.commit('fetchTags');
+    }
+
+    goBack(): void {
+      this.$router.back();
+    }
+
+    createTag(): void {
+      this.$store.commit('createTag');
+    }
 
   }
 </script>
@@ -51,6 +61,7 @@
         display: flex;
         flex-direction: column;
         height: 100vh;
+
         .navBar {
             text-align: center;
             font-size: 16px;
@@ -82,6 +93,7 @@
             margin: 0 16px;
             padding: 8px 0;
             border-bottom: 1px solid #2f2f2f;
+
             %font {
                 width: 38px;
                 height: 38px;
@@ -105,6 +117,7 @@
                 }
             }
         }
+
         .createTag-wrapper {
             text-align: center;
             padding: 14px 0;
@@ -119,10 +132,6 @@
             }
         }
     }
-
-
-
-
 
 
 </style>
