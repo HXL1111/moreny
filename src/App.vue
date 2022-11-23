@@ -7,6 +7,7 @@
 <style lang="scss">
   @import "~@/assets/style/reset.scss";
   @import "~@/assets/style/helper.scss";
+
 #app {
   background: #0F0F0F;
   font-family: $font-hei;

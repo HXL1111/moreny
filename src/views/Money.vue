@@ -1,7 +1,7 @@
 <template>
     <div class="money">
         <Type @update:value="onUpdateType"/>
-        <Tag :tags="tags" @update:value="onUpdateTags"/>
+        <Tag :tags="tagList" @update:value="onUpdateTags"/>
         <NumberPad @update:notes="onUpdateNotes"
                    @update:amount="onUpdateAmount"
                    @update:createAt="onUpdateCreateAt"
@@ -22,7 +22,7 @@
     components: {Type, NumberPad, Tag}
   })
   export default class Money extends Vue {
-    get tags(): void {
+    get tagList(): void {
       return this.$store.state.tagList;
     }
 

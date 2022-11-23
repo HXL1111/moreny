@@ -6,7 +6,7 @@
             <span class="rightIcon"></span>
         </div>
         <router-link class="tag-wrapper"
-                     :to="`/home/money/editLabel/${tag}`"
+                     :to="`/home/money/label/${tag}`"
                      v-for="tag in tags" :key="tag">
 
             <div class="tag">

@@ -23,7 +23,7 @@ const store = new Vuex.Store({
 
     },
     fetchTags(state) {
-     state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]');
+     state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]') as string[];
     },
     saveTags(state){
       window.localStorage.setItem('tagList',JSON.stringify(state.tagList))
