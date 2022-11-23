@@ -32,6 +32,7 @@
   import dayjs from 'dayjs';
 
 
+
   @Component
   export default class NumberPad extends Vue {
     notesValue = '';
@@ -73,6 +74,7 @@
       this.$emit('update:amount', this.outputValue);
       this.createNewAt();
       this.$emit('update:createAt', this.createAt);
+      this.$emit('submit')
       this.notesValue = '';
       this.outputValue = '0';
 
