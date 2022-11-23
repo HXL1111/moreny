@@ -18,8 +18,8 @@
             <button @click="inputContent">7</button>
             <button @click="inputContent">8</button>
             <button @click="inputContent">9</button>
-            <button @click="save" class="save">保存</button>
-            <button @click="makeAgain">再记</button>
+            <button class="save">保存</button>
+            <button >再记</button>
             <button @click="inputContent">0</button>
             <button @click="inputContent">.</button>
         </div>
@@ -29,7 +29,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-  import events from 'vue/src/platforms/web/runtime/modules/events';
+
 
   @Component
   export default class NumberPad extends Vue {

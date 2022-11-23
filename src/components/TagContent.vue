@@ -13,70 +13,7 @@
         </div>
         <ol class="tagList">
             <li>
-                <div class="tagList">
-                    <span class="logo">衣</span>
-                    <span class="name">衣服</span>
-                </div>
-                <div class="money">￥300.00</div>
-            </li>
-            <li>
-                <div class="tagList">
-                    <span class="logo">衣</span>
-                    <span class="name">衣服</span>
-                </div>
-                <div class="money">￥300.00</div>
-            </li>
-            <li>
-                <div class="tagList">
-                    <span class="logo">衣</span>
-                    <span class="name">衣服</span>
-                </div>
-                <div class="money">￥300.00</div>
-            </li>
-            <li>
-                <div class="tagList">
-                    <span class="logo">衣</span>
-                    <span class="name">衣服</span>
-                </div>
-                <div class="money">￥300.00</div>
-            </li>
-            <li>
-                <div class="tagList">
-                    <span class="logo">衣</span>
-                    <span class="name">衣服</span>
-                </div>
-                <div class="money">￥300.00</div>
-            </li>
-            <li>
-                <div class="tagList">
-                    <span class="logo">衣</span>
-                    <span class="name">衣服</span>
-                </div>
-                <div class="money">￥300.00</div>
-            </li>
-            <li>
-                <div class="tagList">
-                    <span class="logo">衣</span>
-                    <span class="name">衣服</span>
-                </div>
-                <div class="money">￥300.00</div>
-            </li>
-            <li>
-                <div class="tagList">
-                    <span class="logo">衣</span>
-                    <span class="name">衣服</span>
-                </div>
-                <div class="money">￥300.00</div>
-            </li>
-            <li>
-                <div class="tagList">
-                    <span class="logo">衣</span>
-                    <span class="name">衣服</span>
-                </div>
-                <div class="money">￥300.00</div>
-            </li>
-            <li>
-                <div class="tagList">
+                <div class="tag-wrapper">
                     <span class="logo">衣</span>
                     <span class="name">衣服</span>
                 </div>
@@ -91,7 +28,7 @@
   import {Component} from 'vue-property-decorator';
 
   @Component
-  export default class Content extends Vue {
+  export default class TagContent extends Vue {
 
   }
 </script>
@@ -130,7 +67,7 @@
                 align-items: center;
                 margin-bottom: 16px;
 
-                > .tagList {
+                > .tag-wrapper {
                     display: flex;
                     align-items: center;
                     color: $color-highLight;

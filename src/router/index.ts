@@ -5,6 +5,8 @@ import Bill from '@/views/Bill.vue';
 import Form from '@/views/Form.vue';
 import NotFound from '@/views/NotFound.vue';
 import Money from '@/views/Money.vue';
+import Label from '@/views/Label.vue';
+import EditLabel from '@/views/EditLabel.vue';
 
 
 Vue.use(VueRouter);
@@ -21,6 +23,14 @@ const routes: Array<RouteConfig> = [
   {
     path:'/home/money',
     component:Money
+  },
+  {
+    path:'/home/money/label',
+    component:Label
+  },
+  {
+    path:'/home/money/label/:tag',
+    component:EditLabel
   },
   {
     path: '/bill',

@@ -1,7 +1,7 @@
 <template>
     <div class="money">
        <Type/>
-        <Tag :tag-list="tags"/>
+        <Tag :tags.sync="tags"/>
         <NumberPad/>
     </div>
 </template>
@@ -16,7 +16,10 @@
     components: {Type, NumberPad, Tag}
   })
   export default class Money extends Vue {
-    tags = ['衣','食','住','行']
+    tags = ['衣服','食','住','行']
+
+    recordList = [{id: '1' , tag: '衣', type: '-', money: '100'}]
+
   }
 </script>
 
