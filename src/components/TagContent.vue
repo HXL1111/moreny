@@ -1,36 +1,97 @@
 <template>
     <div class="content">
         <div class="threeDay">近3日账单</div>
-        <div class="content-wrapper">
-            <div class="dateAndMoney">
-                <span>11月19日</span>
-                <span class="second">今天</span>
-            </div>
-            <div class="dateAndAmount">
-                <span>支：2016.00</span>
-                <span class="second">收：300.00</span>
-            </div>
-        </div>
-        <ol class="tagList">
-            <li>
-                <div class="tag-wrapper">
-                    <span class="logo">衣</span>
-                    <span class="name">衣服</span>
+        <div v-for="(group,index) in groupList " :key="index" class="content1">
+                <div class="content-wrapper">
+                    <div class="dateAndMoney">
+                        <span>{{group.title}}</span>
+                        <span class="second">{{beautify(group.title) }}</span>
+                    </div>
+                    <div class="dateAndAmount">
+                        <span>支：2016.00</span>
+                        <span class="second">收：300.00</span>
+                    </div>
                 </div>
-                <div class="money">￥300.00</div>
-            </li>
-        </ol>
+                <ol class="tagList">
+                    <li v-for="item in group.items" :key="item.id">
+                        <div class="tag-wrapper">
+                            <span class="logo">{{tagString(item.tag).slice(0,1)}}</span>
+                            <span class="name">{{tagString(item.tag)}}</span>
+                        </div>
+                        <div class="money">￥{{item.notesAndAmount.amount}}</div>
+                    </li>
+                </ol>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
+  import dayjs from 'dayjs';
+  import clone from '@/lib/clone';
+  // eslint-disable-next-line no-undef
+  type Result = { title: string, total?: number, items: RecordItem[] }[]
 
   @Component
   export default class TagContent extends Vue {
 
+    // eslint-disable-next-line no-undef
+    get recordList(): RecordItem[] {
+      return this.$store.state.recordList;
+    }
+
+    get groupList(): Result {
+      const newList = clone(this.recordList)
+        .sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
+      if (newList.length === 0) {
+        return [];
+      }
+      const result: Result = [{title: dayjs(newList[0].createAt).format('YYYY-MM-DD'), items: [newList[0]]}];
+      for (let i = 1; i < newList.length; i++) {
+        const current = newList[i];
+        const last = result[result.length - 1];
+        if (dayjs(last.title).isSame(dayjs(current.createAt), 'day')) {
+          last.items.push(current);
+        } else {
+          result.push({title: dayjs(current.createAt).format('YYYY-MM-DD'), items: [current]});
+        }
+      }
+      return result;
+    }
+
+    // get expenseList() {
+    //   const newList = clone(this.groupList);
+    //   return newList;
+    // }
+
+    created(): void {
+      console.log(this.groupList);
+      this.$store.commit('fetchRecord');
+    }
+
+    // eslint-disable-next-line no-undef
+    tagString(tag: Tag[]) :string{
+      return tag.length === 0 ? '无' : tag.map(t => t.name).join(',');
+    }
+
+    beautify(string: string): string {
+      const day = dayjs(string);
+      const now = dayjs();
+      if (day.isSame(now, 'day')) {
+        return '今天';
+      } else if (day.isSame(now.subtract(1, 'day'), 'day')) {
+        return '昨天';
+      } else if (day.isSame(now.subtract(2, 'day'), 'day')) {
+        return '前天';
+      } else if (day.isSame(now, 'year')) {
+        return day.format('M月D日');
+      } else {
+        return day.format('YYYY年M月D日');
+      }
+    }
   }
+
 </script>
 
 <style lang="scss" scoped>
@@ -45,58 +106,61 @@
             padding-bottom: 14px;
         }
 
-        > .content-wrapper {
-            font-size: 10px;
-            color: #7d7c80;
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
+        > .content1 {
 
-            > .dateAndMoney {
-                > .second {
-                    padding-left: $leftPadding;
-                }
-            }
-
-        }
-
-        > .tagList {
-            > li {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 16px;
-
-                > .tag-wrapper {
+                > .content-wrapper {
+                    font-size: 10px;
+                    color: #7d7c80;
                     display: flex;
-                    align-items: center;
-                    color: $color-highLight;
+                    justify-content: space-between;
+                    padding-top: 4px;
+                    padding-bottom: 10px;
 
-                    %font {
-                        width: 38px;
-                        height: 38px;
-                        line-height: 38px;
+                    > .dateAndMoney {
+                        > .second {
+                            padding-left: $leftPadding;
+                        }
                     }
-
-                    > .logo {
-                        background: #515151;
-                        text-align: center;
-                        font-size: 15px;
-                        @extend %font;
-                        border-radius: 50%;
-                    }
-
-                    > .name {
-                        @extend %font;
-                        padding-left: $leftPadding;
-                    }
-                }
-
-                > .money {
 
                 }
 
-            }
+                > .tagList {
+                    > li {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 16px;
+
+                        > .tag-wrapper {
+                            display: flex;
+                            align-items: center;
+                            color: $color-highLight;
+
+                            %font {
+                                width: 38px;
+                                height: 38px;
+                                line-height: 38px;
+                            }
+
+                            > .logo {
+                                background: #515151;
+                                text-align: center;
+                                font-size: 15px;
+                                @extend %font;
+                                border-radius: 50%;
+                            }
+
+                            > .name {
+                                @extend %font;
+                                padding-left: $leftPadding;
+                            }
+                        }
+
+                        > .money {
+
+                        }
+                    }
+                }
 
 
         }
