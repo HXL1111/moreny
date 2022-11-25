@@ -34,6 +34,7 @@
       if (this.tagList) {
         this.selectedTags = [this.tagList[0]];
       }
+      this.$emit('update:value', this.selectedTags);
     }
 
     select(tag: string): void {

@@ -8,7 +8,7 @@
         <div class="formItem-wrapper">
             <span class="tagName">标签名</span>
             <FormItem :value="currentTag"
-                    placeholder="请输入标签名"/>
+                      placeholder="请输入标签名"/>
         </div>
         <Button @click="removeTag">删除标签</Button>
     </div>
@@ -28,25 +28,26 @@
       return this.$store.state.tagList;
     }
 
-    get currentTag() :void{
+    get currentTag(): void {
       return this.$store.state.currentTag;
     }
-
 
 
     created(): void {
       const tag = this.$route.params.tag;
       this.$store.commit('fetchTags');
-      this.$store.commit('setCurrentTag',tag)
+      this.$store.commit('setCurrentTag', tag);
       if (!tag) {
         this.$router.push('/404');
       }
     }
-    removeTag():void{
-      this.$store.commit('removeTag',this.currentTag)
+
+    removeTag(): void {
+      this.$store.commit('removeTag', this.currentTag);
     }
-    goBack():void{
-      this.$router.back()
+
+    goBack(): void {
+      this.$router.back();
     }
   }
 </script>
@@ -57,6 +58,7 @@
     .editLabel {
         color: $color-highLight;
         height: 100vh;
+
         .navBar {
             text-align: center;
             font-size: 16px;
@@ -90,6 +92,7 @@
                 line-height: 52px;
                 padding: 0 18px;
             }
+
 
         }
 
