@@ -28,11 +28,15 @@
   })
   export default class Tags extends Vue {
 
-    tagList = this.$store.state.tagList;
+    // eslint-disable-next-line no-undef
+    get tagList(): Tag[] {
+      return this.$store.state.tagList;
+    }
+
     // eslint-disable-next-line no-undef
     selectedTags: Tag[] = [];
 
-    created() :void{
+    created(): void {
       this.$store.commit('fetchTags');
       if (this.tagList) {
         this.selectedTags = [this.tagList[0]];

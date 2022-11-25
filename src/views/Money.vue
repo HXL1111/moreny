@@ -26,7 +26,6 @@
     created(): void {
       this.$store.commit('fetchTags');
       this.$store.commit('fetchRecord');
-      console.log(this.record);
     }
 
     onUpdateType(value: string): void {

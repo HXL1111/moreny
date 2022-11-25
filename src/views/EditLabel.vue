@@ -29,7 +29,8 @@
       return this.$store.state.tagList;
     }
 
-    get currentTag(): void {
+    // eslint-disable-next-line no-undef
+    get currentTag(): Tag {
       return this.$store.state.currentTag;
     }
 
@@ -43,7 +44,8 @@
     }
 
     update(name: string): void {
-      this.$store.commit('updateTag', name);
+      this.$store.commit('updateTag', {id: this.currentTag.id, name});
+      this.goBack()
     }
 
     remove(): void {

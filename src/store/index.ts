@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import clone from '@/lib/clone.ts';
 import createId from '@/lib/createId.ts';
+import router from '@/router';
 type RootState = {
   tagList:Tag[],
   record: RecordItem,
@@ -32,6 +33,7 @@ const store = new Vuex.Store({
       record2.createAt = new Date().toISOString();
       state.recordList.push(record2);
       store.commit('saveRecord');
+
     },
     saveRecord(state) {
       window.localStorage.setItem('recordList', JSON.stringify(state.recordList));
@@ -50,7 +52,7 @@ const store = new Vuex.Store({
           window.alert('已创建相同的标签')
         }else {
           const id = createId().toString()
-          const tag = {id:id , name:name}
+          const tag = {id , name}
           state.tagList.push(tag)
           store.commit('saveTags')
           window.alert('添加成功')
@@ -58,24 +60,29 @@ const store = new Vuex.Store({
       }
 
     },
-    // updateTag(state, tag: string) {
-    //   for (let i = 0; i < state.tagList.length; i++) {
-    //     if (state.tagList[i] === tag) {
-    //       window.alert('标签名重复');
-    //     }
-    //   }
-    // },
+    updateTag(state, payload:{id:string,name:string}) {
+     const {id,name} = payload
+      const nameList = state.tagList.map(item => item.name)
+      if(nameList.indexOf(name)>=0){
+        window.alert('标签名重复')
+      }else{
+        const tag = state.tagList.filter(item => item.id === id )[0]
+        tag.name = name
+        store.commit('saveTags')
+        window.alert('修改成功')
+      }
+    },
 
-    // removeTag(state, tag: string) {
-    //   for (let i = 0; i < state.tagList.length; i++) {
-    //     if (state.tagList[i] === tag) {
-    //       state.tagList.splice(i, 1);
-    //       store.commit('saveTags');
-    //       router.back();
-    //       break;
-    //     }
-    //   }
-    // },
+    removeTag(state, tag: Tag) {
+      for (let i = 0; i < state.tagList.length; i++) {
+        if (state.tagList[i] === tag) {
+          state.tagList.splice(i, 1);
+          store.commit('saveTags');
+          router.back();
+          break;
+        }
+      }
+    },
   },
   actions: {},
   modules: {}

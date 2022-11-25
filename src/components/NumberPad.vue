@@ -73,13 +73,16 @@
       if (this.output==='0'){return}
       this.$emit('update:notesAndAmount', {notes:this.$store.state.record.notesAndAmount.notes,amount:this.output});
       this.$emit('submit','true');
+      this.$store.state.record.notesAndAmount.notes = ''
       this.output = '0';
+
     }
 
     makeAgain(): void {
       if (this.output==='0'){return}
       this.$emit('update:notesAndAmount', {notes:this.$store.state.record.notesAndAmount.notes,amount:this.output});
       this.$emit('submit','false');
+      this.$store.state.record.notesAndAmount.notes = ''
       this.output = '0';
     }
   }
