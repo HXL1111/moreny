@@ -69,20 +69,18 @@
       this.output = '0';
     }
 
-    collectData(): void {
+    save(): void {
       if (this.output==='0'){return}
       this.$emit('update:notesAndAmount', {notes:this.$store.state.record.notesAndAmount.notes,amount:this.output});
-      this.$emit('submit');
+      this.$emit('submit','true');
       this.output = '0';
-
-    }
-
-    save(): void {
-      this.collectData();
     }
 
     makeAgain(): void {
-      this.collectData();
+      if (this.output==='0'){return}
+      this.$emit('update:notesAndAmount', {notes:this.$store.state.record.notesAndAmount.notes,amount:this.output});
+      this.$emit('submit','false');
+      this.output = '0';
     }
   }
 

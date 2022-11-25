@@ -1,6 +1,5 @@
 <template>
     <div class="money">
-        {{record}}
         <Type @update:value="onUpdateType"/>
         <Tag :tags="tagList" @update:value="onUpdateTags"/>
         <NumberPad @update:notesAndAmount="onUpdateNotesAndAmount"
@@ -25,12 +24,12 @@
       return this.$store.state.tagList;
     }
 
-    record = this.$store.state.record
+    record = this.$store.state.record;
 
     created(): void {
       this.$store.commit('fetchTags');
-      this.$store.commit('fetchRecord')
-      console.log(this.record)
+      this.$store.commit('fetchRecord');
+      console.log(this.record);
     }
 
     onUpdateType(value: string): void {
@@ -41,15 +40,18 @@
       this.record.tag = value;
     }
 
-    onUpdateNotesAndAmount(value: {notes: string, amount:string}): void {
+    onUpdateNotesAndAmount(value: { notes: string, amount: string }): void {
       this.record.notesAndAmount = value;
     }
 
-    onSaveRecord(): void {
-      if(!this.record.tag || this.record.tag.length === 0){
-        window.alert('请至少选择一个标签')
-      }else {
-        this.$store.commit('createRecord',this.record)
+    onSaveRecord(value: string): void {
+      if (!this.record.tag || this.record.tag.length === 0) {
+        window.alert('请至少选择一个标签');
+      } else {
+        this.$store.commit('createRecord', this.record);
+        if (value === 'true') {
+          this.$router.back();
+        }
       }
     }
   }
