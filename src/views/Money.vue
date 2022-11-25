@@ -1,9 +1,10 @@
 <template>
     <div class="money">
+        {{record}}
         <Type @update:value="onUpdateType"/>
         <Tag :tags="tagList" @update:value="onUpdateTags"/>
-        <NumberPad @update:notes="onUpdateNotes"
-                   @update:amount="onUpdateAmount"
+        <NumberPad @update:notesAndAmount="onUpdateNotesAndAmount"
+
                    @update:createAt="onUpdateCreateAt"
                    @submit="onSaveRecord"
         />
@@ -16,49 +17,48 @@
   import Tag from '@/components/Tag.vue';
   import NumberPad from '@/components/NumberPad.vue';
   import Type from '@/components/Type.vue';
-
+  import FormItem from '@/components/FormItem.vue';
+  type RecordItem = {
+    tag: string[]
+    type: string
+    notesAndAmount: { notes:string,amount:string }
+    createAt?: string
+  }
 
   @Component({
-    components: {Type, NumberPad, Tag}
+    components: {FormItem, Type, NumberPad, Tag}
   })
   export default class Money extends Vue {
     get tagList(): void {
       return this.$store.state.tagList;
     }
+    get record(): void{
+      return  this.$store.state.record
+    }
 
-    // eslint-disable-next-line no-undef
-    recordList: RecordItem[] = JSON.parse(window.localStorage.getItem('recordList') || '[]')
-    ;
-    // eslint-disable-next-line no-undef
-    record: RecordItem = {
-      tag: [], type: '-', notes: '', amount: '0', createAt: ''
-    };
 
+    recordList: RecordItem[] = JSON.parse(window.localStorage.getItem('recordList') || '[]');
 
     created(): void {
       this.$store.commit('fetchTags');
+      console.log(this.record)
     }
 
-
     onUpdateType(value: string): void {
-      this.record.type = value;
-
+      this.$store.state.record.type = value;
     }
 
     onUpdateTags(value: string[]): void {
-      this.record.tag = value;
+      this.$store.state.record.tag = value;
     }
 
-    onUpdateNotes(value: string): void {
-      this.record.notes = value;
-    }
 
-    onUpdateAmount(value: string): void {
-      this.record.amount = value;
+    onUpdateNotesAndAmount(value: {notes: string, amount:string}): void {
+      this.$store.state.record.notesAndAmount = value;
     }
 
     onUpdateCreateAt(value: string): void {
-      this.record.createAt = value;
+      this.$store.state.record.createAt = value;
     }
 
     clone<T>(data: T): T {
@@ -66,7 +66,7 @@
     }
 
     onSaveRecord(): void {
-      const record2 = this.clone(this.record);
+      const record2 = this.clone(this.$store.state.record);
       this.recordList.push(record2);
       console.log(this.recordList);
       window.localStorage.setItem('recordList', JSON.stringify(this.recordList));

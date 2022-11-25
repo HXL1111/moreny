@@ -1,11 +1,9 @@
 <template>
-    <router-link to="home/money">
-        <div class="makeAccount">
+        <div class="makeAccount" @click="$emit('click',$event)">
             <button>
-                记一笔
+                <slot/>
             </button>
         </div>
-    </router-link>
 
 </template>
 

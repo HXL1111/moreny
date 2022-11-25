@@ -1,11 +1,13 @@
 <template>
     <div class="numberPad">
-        <label class="notes">
-            <input type="text"
-                   placeholder="请输入备注信息（最多150字）"
-                   v-model="notesValue">
-            <span>{{outputValue}}</span>
-        </label>
+        <div class="output-wrapper">
+            <FormItem placeholder="请输入备注(最多150字)"
+                        :value="$store.state.record.notesAndAmount.notes"
+                      @update:value="onUpdateNotes"
+            >
+                <span class="output">{{outputValue}}</span>
+            </FormItem>
+        </div>
         <div class="buttons">
             <button @click="inputContent">1</button>
             <button @click="inputContent">2</button>
@@ -30,15 +32,18 @@
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import dayjs from 'dayjs';
+  import FormItem from '@/components/FormItem.vue';
 
-
-
-  @Component
+  @Component({
+    components: {FormItem}
+  })
   export default class NumberPad extends Vue {
-    notesValue = '';
     outputValue = '0';
     createAt = '';
 
+    onUpdateNotes(value:string) :void{
+        this.$store.state.record.notesAndAmount.notes = value
+    }
 
     inputContent(event: MouseEvent): string | void {
       const input = (event.target as HTMLButtonElement).textContent as string;
@@ -70,19 +75,16 @@
     }
 
     collectData(): void {
-      this.$emit('update:notes', this.notesValue);
-      this.$emit('update:amount', this.outputValue);
+      this.$emit('update:notesAndAmount', {notes:this.$store.state.record.notesAndAmount.notes,amount:this.outputValue});
       this.createNewAt();
       this.$emit('update:createAt', this.createAt);
-      this.$emit('submit')
-      this.notesValue = '';
+      this.$emit('submit');
       this.outputValue = '0';
-
     }
 
     save(): void {
       this.collectData();
-      // this.$router.back();
+      this.$router.back();
     }
 
     makeAgain(): void {
@@ -98,34 +100,22 @@
     .numberPad {
         height: 308px;
 
-        > .notes {
-            display: flex;
-            padding-left: 12px;
-
-            > input {
-                padding: 18px 0;
-                flex-grow: 1;
-                background: transparent;
-                border: none;
-                color: $color-highLight;
-                word-wrap: break-word;
-                word-break: break-all;
-                overflow: hidden;
-            }
-
-            > span {
-                padding: 0 12px;
-                text-align: center;
-                line-height: 52px;
-                font-size: 24px;
-                color: $color-highLight;
+        > .output-wrapper {
+            > .formItem {
+                > .output {
+                    padding-left: 12px;
+                    padding-right: 24px;
+                    text-align: center;
+                    line-height: 52px;
+                    font-size: 24px;
+                    color: $color-highLight;
+                }
             }
         }
 
         > .buttons {
             border-radius: 30px 30px 0 0;
             background: $color-background;
-
             @extend %clearFix;
 
             > button {

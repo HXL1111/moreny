@@ -1,7 +1,9 @@
 <template>
     <Layout>
         <AmountDisplay/>
-        <Button/>
+        <router-link to="/home/money">
+            <Button>记一笔</Button>
+        </router-link>
         <TagContent/>
     </Layout>
 </template>
