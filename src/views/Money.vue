@@ -18,6 +18,7 @@
   import NumberPad from '@/components/NumberPad.vue';
   import Type from '@/components/Type.vue';
   import FormItem from '@/components/FormItem.vue';
+  import clone from '@/lib/clone';
   type RecordItem = {
     tag: string[]
     type: string
@@ -61,12 +62,8 @@
       this.$store.state.record.createAt = value;
     }
 
-    clone<T>(data: T): T {
-      return JSON.parse(JSON.stringify(data));
-    }
-
     onSaveRecord(): void {
-      const record2 = this.clone(this.$store.state.record);
+      const record2 = clone(this.$store.state.record);
       this.recordList.push(record2);
       console.log(this.recordList);
       window.localStorage.setItem('recordList', JSON.stringify(this.recordList));

@@ -11,7 +11,6 @@ const store = new Vuex.Store({
       tag: [], type: '-', notesAndAmount:{notes:'',amount:'0'}, createAt: ''
     } as RecordItem,
     recordList: [] as RecordItem[],
-
     currentTag: ''
   },
   mutations: {
