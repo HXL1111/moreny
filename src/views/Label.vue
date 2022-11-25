@@ -6,14 +6,13 @@
             <span class="rightIcon"></span>
         </div>
         <router-link class="tag-wrapper"
-                     :to="`/home/money/label/${tag}`"
-                     v-for="tag in tags" :key="tag">
+                     :to="`/home/money/label/${tag.id}`"
+                     v-for="tag in tags" :key="tag.id">
 
             <div class="tag">
-                <span class="logo">{{tag.slice(0,1)}}</span>
-                <span class="name">{{tag}}</span>
+                <span class="logo">{{tag.name.slice(0,1)}}</span>
+                <span class="name">{{tag.name}}</span>
             </div>
-
             <Icon name="right"/>
         </router-link>
 

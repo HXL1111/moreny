@@ -1,12 +1,12 @@
 <template>
     <div class="tagList-wrapper">
         <ol class="tag-wrapper">
-            <li v-for="tag in tagList" :key="tag">
+            <li v-for="tag in tagList" :key="tag.id">
                 <span class="tag-wrapper"
                       @click="select(tag)"
-                      :class="{selected: selectedTags.indexOf(tag)>=0}">{{tag.slice(0,1)}}
+                      :class="{selected: selectedTags.indexOf(tag)>=0}">{{tag.name.slice(0,1)}}
                 </span>
-                <span class="tagName">{{tag}}</span>
+                <span class="tagName">{{tag.name}}</span>
             </li>
             <li>
                 <router-link to="/home/money/label" class="tag-wrapper">
@@ -20,24 +20,28 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component, Prop} from 'vue-property-decorator';
+  import {Component} from 'vue-property-decorator';
   import Icon from '@/components/Icon.vue';
 
   @Component({
     components: {Icon}
   })
-  export default class Tag extends Vue {
-    @Prop() tagList: string[] | undefined;
-    selectedTags: string[] = [];
+  export default class Tags extends Vue {
+
+    tagList = this.$store.state.tagList;
+    // eslint-disable-next-line no-undef
+    selectedTags: Tag[] = [];
 
     created() :void{
+      this.$store.commit('fetchTags');
       if (this.tagList) {
         this.selectedTags = [this.tagList[0]];
       }
       this.$emit('update:value', this.selectedTags);
     }
 
-    select(tag: string): void {
+    // eslint-disable-next-line no-undef
+    select(tag: Tag): void {
       this.selectedTags = [];
       this.selectedTags.push(tag);
       this.$emit('update:value', this.selectedTags);

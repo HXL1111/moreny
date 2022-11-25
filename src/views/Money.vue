@@ -1,7 +1,7 @@
 <template>
     <div class="money">
         <Type @update:value="onUpdateType"/>
-        <Tag :tagList="tagList" @update:value="onUpdateTags"/>
+        <Tags @update:value="onUpdateTags"/>
         <NumberPad @update:notesAndAmount="onUpdateNotesAndAmount"
                    @submit="onSaveRecord"
         />
@@ -11,18 +11,15 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-  import Tag from '@/components/Tag.vue';
+  import Tags from '@/components/Tags.vue';
   import NumberPad from '@/components/NumberPad.vue';
   import Type from '@/components/Type.vue';
   import FormItem from '@/components/FormItem.vue';
 
   @Component({
-    components: {FormItem, Type, NumberPad, Tag}
+    components: {FormItem, Type, NumberPad, Tags}
   })
   export default class Money extends Vue {
-    get tagList(): void {
-      return this.$store.state.tagList;
-    }
 
     record = this.$store.state.record;
 

@@ -29,7 +29,7 @@ const routes: Array<RouteConfig> = [
     component:Label
   },
   {
-    path:'/home/money/label/:tag',
+    path:'/home/money/label/:id',
     component:EditLabel
   },
   {

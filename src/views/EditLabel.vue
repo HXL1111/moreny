@@ -7,10 +7,11 @@
         </div>
         <div class="formItem-wrapper">
             <span class="tagName">标签名</span>
-            <FormItem :value="currentTag"
+            <FormItem :value="currentTag.name"
+                      @update:value="update"
                       placeholder="请输入标签名"/>
         </div>
-        <Button @click="removeTag">删除标签</Button>
+        <Button @click="remove">删除标签</Button>
     </div>
 </template>
 
@@ -32,17 +33,20 @@
       return this.$store.state.currentTag;
     }
 
-
     created(): void {
-      const tag = this.$route.params.tag;
+      const id = this.$route.params.id;
       this.$store.commit('fetchTags');
-      this.$store.commit('setCurrentTag', tag);
-      if (!tag) {
+      this.$store.commit('setCurrentTag', id);
+      if (!id) {
         this.$router.push('/404');
       }
     }
 
-    removeTag(): void {
+    update(name: string): void {
+      this.$store.commit('updateTag', name);
+    }
+
+    remove(): void {
       this.$store.commit('removeTag', this.currentTag);
     }
 

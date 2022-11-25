@@ -1,8 +1,10 @@
-type Tag = {name: string}
+
+type Tag = {id:string ,name: string}
 
 type RecordItem = {
-  tag: string[]
+  tag: Tag[]
   type: string
   notesAndAmount: { notes:string,amount:string }
   createAt?: string
 }
+

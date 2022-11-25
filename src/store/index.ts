@@ -1,68 +1,81 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import router from '@/router';
-import clone from '@/lib/clone';
-
+import clone from '@/lib/clone.ts';
+import createId from '@/lib/createId.ts';
+type RootState = {
+  tagList:Tag[],
+  record: RecordItem,
+  recordList:RecordItem[],
+  currentTag?: Tag
+}
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    tagList: [] as string[],
-    record:{
-      tag: [], type: '-', notesAndAmount:{notes:'',amount:'0'}, createAt: ''
-    } as RecordItem,
-    recordList: [] as RecordItem[],
-    currentTag: ''
-  },
+    tagList: [] ,
+    record: {
+      tag: [], type: '-', notesAndAmount: {notes: '', amount: '0'}, createAt: ''
+    } ,
+    recordList: [] ,
+    currentTag: undefined
+  } as RootState,
 
   mutations: {
-    setCurrentTag(state, tag: string) {
-      state.currentTag = state.tagList.filter(t => t === tag)[0];
+    setCurrentTag(state, id: string) {
+      state.currentTag = state.tagList.filter(t => t.id === id)[0];
     },
     fetchRecord(state) {
       state.recordList = JSON.parse(window.localStorage.getItem('recordList') || '[]');
     },
-    createRecord(state,record){
+    createRecord(state, record) {
       const record2 = clone(record);
-      record2.createAt = new Date().toISOString()
+      record2.createAt = new Date().toISOString();
       state.recordList.push(record2);
-      store.commit('saveRecord')
+      store.commit('saveRecord');
     },
     saveRecord(state) {
       window.localStorage.setItem('recordList', JSON.stringify(state.recordList));
     },
     fetchTags(state) {
-      state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]') as string[];
+      state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]') as Tag[];
     },
     saveTags(state) {
       window.localStorage.setItem('tagList', JSON.stringify(state.tagList));
     },
     createTag(state) {
-      const name = window.prompt('请输入标签名');
-      if (!name) {
-        window.alert('标签名不能为空');
-      } else {
-        if (state.tagList) {
-          if (state.tagList.indexOf(name) >= 0) {
-            window.alert('标签名已存在');
-          } else {
-            state.tagList.push(name);
-          }
+      const name = window.prompt('请输入标签名')
+     const names = state.tagList.map(item => item.name)
+      if(name){
+        if (names.indexOf(name)>= 0){
+          window.alert('已创建相同的标签')
+        }else {
+          const id = createId().toString()
+          const tag = {id:id , name:name}
+          state.tagList.push(tag)
+          store.commit('saveTags')
+          window.alert('添加成功')
         }
-        store.commit('saveTags');
       }
-    },
 
-    removeTag(state, tag: string) {
-      for (let i = 0; i < state.tagList.length; i++) {
-        if (state.tagList[i] === tag) {
-          state.tagList.splice(i, 1);
-          store.commit('saveTags');
-          router.back();
-          break;
-        }
-      }
     },
+    // updateTag(state, tag: string) {
+    //   for (let i = 0; i < state.tagList.length; i++) {
+    //     if (state.tagList[i] === tag) {
+    //       window.alert('标签名重复');
+    //     }
+    //   }
+    // },
+
+    // removeTag(state, tag: string) {
+    //   for (let i = 0; i < state.tagList.length; i++) {
+    //     if (state.tagList[i] === tag) {
+    //       state.tagList.splice(i, 1);
+    //       store.commit('saveTags');
+    //       router.back();
+    //       break;
+    //     }
+    //   }
+    // },
   },
   actions: {},
   modules: {}
