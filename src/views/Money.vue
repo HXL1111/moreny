@@ -1,7 +1,7 @@
 <template>
     <div class="money">
         <Type @update:value="onUpdateType"/>
-        <Tag :tags="tagList" @update:value="onUpdateTags"/>
+        <Tag :tagList="tagList" @update:value="onUpdateTags"/>
         <NumberPad @update:notesAndAmount="onUpdateNotesAndAmount"
                    @submit="onSaveRecord"
         />

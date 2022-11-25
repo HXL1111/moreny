@@ -1,7 +1,7 @@
 <template>
     <div class="tagList-wrapper">
         <ol class="tag-wrapper">
-            <li v-for="tag in tags" :key="tag">
+            <li v-for="tag in tagList" :key="tag">
                 <span class="tag-wrapper"
                       @click="select(tag)"
                       :class="{selected: selectedTags.indexOf(tag)>=0}">{{tag.slice(0,1)}}
@@ -9,7 +9,9 @@
                 <span class="tagName">{{tag}}</span>
             </li>
             <li>
-                <router-link to="/home/money/label" class="tag-wrapper"><Icon name="edit"/></router-link>
+                <router-link to="/home/money/label" class="tag-wrapper">
+                    <Icon name="edit"/>
+                </router-link>
                 <span class="tagName">编辑</span>
             </li>
         </ol>
@@ -25,16 +27,20 @@
     components: {Icon}
   })
   export default class Tag extends Vue {
-    @Prop() tags: string[] | undefined;
+    @Prop() tagList: string[] | undefined;
     selectedTags: string[] = [];
+
+    created() :void{
+      if (this.tagList) {
+        this.selectedTags = [this.tagList[0]];
+      }
+    }
 
     select(tag: string): void {
       this.selectedTags = [];
       this.selectedTags.push(tag);
-      this.$emit('update:value',this.selectedTags)
+      this.$emit('update:value', this.selectedTags);
     }
-
-
   }
 </script>
 
