@@ -5,7 +5,7 @@
                         :value="$store.state.record.notesAndAmount.notes"
                       @update:value="onUpdateNotes"
             >
-                <span class="output">{{outputValue}}</span>
+                <span class="output">{{output}}</span>
             </FormItem>
         </div>
         <div class="buttons">
@@ -31,15 +31,14 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-  import dayjs from 'dayjs';
   import FormItem from '@/components/FormItem.vue';
 
   @Component({
     components: {FormItem}
   })
   export default class NumberPad extends Vue {
-    outputValue = '0';
-    createAt = '';
+    output = '0';
+
 
     onUpdateNotes(value:string) :void{
         this.$store.state.record.notesAndAmount.notes = value
@@ -47,44 +46,39 @@
 
     inputContent(event: MouseEvent): string | void {
       const input = (event.target as HTMLButtonElement).textContent as string;
-      if (this.outputValue.length >= 8) { return window.alert('金额长度不能超过8位'); }
-      if (this.outputValue === '0' && input !== '.') {
-        this.outputValue = input;
-      } else if (this.outputValue.indexOf('.') >= 0 && input === '.') {
+      if (this.output.length >= 8) { return window.alert('金额长度不能超过8位'); }
+      if (this.output === '0' && input !== '.') {
+        this.output = input;
+      } else if (this.output.indexOf('.') >= 0 && input === '.') {
         return;
       } else {
-        this.outputValue += input;
+        this.output += input;
       }
-      return this.outputValue;
+      return this.output;
     }
 
     remove(): void {
-      if (this.outputValue.length === 1) {
-        this.outputValue = '0';
+      if (this.output.length === 1) {
+        this.output = '0';
       } else {
-        this.outputValue = this.outputValue.slice(0, -1);
+        this.output = this.output.slice(0, -1);
       }
     }
 
     clear(): void {
-      this.outputValue = '0';
-    }
-
-    createNewAt(): void {
-      this.createAt = JSON.stringify(dayjs());
+      this.output = '0';
     }
 
     collectData(): void {
-      this.$emit('update:notesAndAmount', {notes:this.$store.state.record.notesAndAmount.notes,amount:this.outputValue});
-      this.createNewAt();
-      this.$emit('update:createAt', this.createAt);
+      if (this.output==='0'){return}
+      this.$emit('update:notesAndAmount', {notes:this.$store.state.record.notesAndAmount.notes,amount:this.output});
       this.$emit('submit');
-      this.outputValue = '0';
+      this.output = '0';
+
     }
 
     save(): void {
       this.collectData();
-      this.$router.back();
     }
 
     makeAgain(): void {

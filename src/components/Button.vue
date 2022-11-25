@@ -4,7 +4,6 @@
                 <slot/>
             </button>
         </div>
-
 </template>
 
 <script lang="ts">

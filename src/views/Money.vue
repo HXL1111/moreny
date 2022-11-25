@@ -4,8 +4,6 @@
         <Type @update:value="onUpdateType"/>
         <Tag :tags="tagList" @update:value="onUpdateTags"/>
         <NumberPad @update:notesAndAmount="onUpdateNotesAndAmount"
-
-                   @update:createAt="onUpdateCreateAt"
                    @submit="onSaveRecord"
         />
     </div>
@@ -18,13 +16,6 @@
   import NumberPad from '@/components/NumberPad.vue';
   import Type from '@/components/Type.vue';
   import FormItem from '@/components/FormItem.vue';
-  import clone from '@/lib/clone';
-  type RecordItem = {
-    tag: string[]
-    type: string
-    notesAndAmount: { notes:string,amount:string }
-    createAt?: string
-  }
 
   @Component({
     components: {FormItem, Type, NumberPad, Tag}
@@ -33,40 +24,33 @@
     get tagList(): void {
       return this.$store.state.tagList;
     }
-    get record(): void{
-      return  this.$store.state.record
-    }
 
-
-    recordList: RecordItem[] = JSON.parse(window.localStorage.getItem('recordList') || '[]');
+    record = this.$store.state.record
 
     created(): void {
       this.$store.commit('fetchTags');
+      this.$store.commit('fetchRecord')
       console.log(this.record)
     }
 
     onUpdateType(value: string): void {
-      this.$store.state.record.type = value;
+      this.record.type = value;
     }
 
     onUpdateTags(value: string[]): void {
-      this.$store.state.record.tag = value;
+      this.record.tag = value;
     }
-
 
     onUpdateNotesAndAmount(value: {notes: string, amount:string}): void {
-      this.$store.state.record.notesAndAmount = value;
-    }
-
-    onUpdateCreateAt(value: string): void {
-      this.$store.state.record.createAt = value;
+      this.record.notesAndAmount = value;
     }
 
     onSaveRecord(): void {
-      const record2 = clone(this.$store.state.record);
-      this.recordList.push(record2);
-      console.log(this.recordList);
-      window.localStorage.setItem('recordList', JSON.stringify(this.recordList));
+      if(!this.record.tag || this.record.tag.length === 0){
+        window.alert('请至少选择一个标签')
+      }else {
+        this.$store.commit('createRecord',this.record)
+      }
     }
   }
 </script>

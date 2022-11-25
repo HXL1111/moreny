@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import router from '@/router';
+import clone from '@/lib/clone';
 
 Vue.use(Vuex);
 
@@ -20,12 +21,14 @@ const store = new Vuex.Store({
     fetchRecord(state) {
       state.recordList = JSON.parse(window.localStorage.getItem('recordList') || '[]');
     },
+    createRecord(state,record){
+      const record2 = clone(record);
+      record2.createAt = new Date().toISOString()
+      state.recordList.push(record2);
+      store.commit('saveRecord')
+    },
     saveRecord(state) {
       window.localStorage.setItem('recordList', JSON.stringify(state.recordList));
-    },
-    createRecord(state, record) {
-      state.recordList.push(record);
-      store.commit('saveRecord');
     },
     fetchTags(state) {
       state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]') as string[];
