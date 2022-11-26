@@ -2,25 +2,28 @@
     <div class="content">
         <div class="threeDay">近3日账单</div>
         <div v-for="(group,index) in groupList " :key="index" class="content1">
-                <div class="content-wrapper">
-                    <div class="dateAndMoney">
-                        <span>{{group.title}}</span>
-                        <span class="second">{{beautify(group.title) }}</span>
-                    </div>
-                    <div class="dateAndAmount">
-                        <span>支：2016.00</span>
-                        <span class="second">收：300.00</span>
-                    </div>
+            <div class="content-wrapper">
+                <div class="dateAndMoney">
+                    <span>{{group.title}}</span>
+                    <span class="second">{{beautify(group.title) }}</span>
                 </div>
-                <ol class="tagList">
-                    <li v-for="item in group.items" :key="item.id">
-                        <div class="tag-wrapper">
-                            <span class="logo">{{tagString(item.tag).slice(0,1)}}</span>
+                <div class="dateAndAmount">
+                    <span>支：2016.00</span>
+                    <span class="second">收：300.00</span>
+                </div>
+            </div>
+            <ol class="tagList">
+                <li v-for="item in group.items" :key="item.id">
+                    <div class="tag-wrapper">
+                        <span class="logo">{{tagString(item.tag).slice(0,1)}}</span>
+                        <div class="nameAndNotes">
                             <span class="name">{{tagString(item.tag)}}</span>
+                            <span class="notes">{{item.notesAndAmount.notes}}</span>
                         </div>
-                        <div class="money">￥{{item.notesAndAmount.amount}}</div>
-                    </li>
-                </ol>
+                    </div>
+                    <div class="money">￥{{item.notesAndAmount.amount}}</div>
+                </li>
+            </ol>
         </div>
     </div>
 </template>
@@ -71,7 +74,7 @@
     }
 
     // eslint-disable-next-line no-undef
-    tagString(tag: Tag[]) :string{
+    tagString(tag: Tag[]): string {
       return tag.length === 0 ? '无' : tag.map(t => t.name).join(',');
     }
 
@@ -108,61 +111,67 @@
 
         > .content1 {
 
-                > .content-wrapper {
-                    font-size: 10px;
-                    color: #7d7c80;
+            > .content-wrapper {
+                font-size: 10px;
+                color: #7d7c80;
+                display: flex;
+                justify-content: space-between;
+                padding-top: 4px;
+                padding-bottom: 10px;
+
+                > .dateAndMoney {
+                    > .second {
+                        padding-left: $leftPadding;
+                    }
+                }
+
+            }
+
+            > .tagList {
+                > li {
                     display: flex;
                     justify-content: space-between;
-                    padding-top: 4px;
-                    padding-bottom: 10px;
+                    align-items: center;
+                    margin-bottom: 16px;
 
-                    > .dateAndMoney {
-                        > .second {
-                            padding-left: $leftPadding;
-                        }
-                    }
-
-                }
-
-                > .tagList {
-                    > li {
+                    > .tag-wrapper {
                         display: flex;
-                        justify-content: space-between;
                         align-items: center;
-                        margin-bottom: 16px;
+                        color: $color-highLight;
 
-                        > .tag-wrapper {
-                            display: flex;
-                            align-items: center;
-                            color: $color-highLight;
 
-                            %font {
-                                width: 38px;
-                                height: 38px;
-                                line-height: 38px;
-                            }
-
-                            > .logo {
-                                background: #515151;
-                                text-align: center;
-                                font-size: 15px;
-                                @extend %font;
-                                border-radius: 50%;
-                            }
-
-                            > .name {
-                                @extend %font;
-                                padding-left: $leftPadding;
-                            }
+                        %font {
+                            width: 38px;
+                            height: 38px;
+                            line-height: 38px;
                         }
 
-                        > .money {
+                        > .logo {
+                            background: #515151;
+                            text-align: center;
+                            font-size: 15px;
+                            @extend %font;
+                            border-radius: 50%;
+                        }
 
+                        > .nameAndNotes {
+                            padding-left: 12px;
+                            display: flex;
+                            flex-direction: column;
+
+                            > .notes {
+                                transform: scale(0.9);
+                                font-size: 12px;
+                                color: #c6c6c6;
+                            }
                         }
                     }
+
+                    > .money {
+
+                    }
                 }
-
-
+            }
         }
     }
 </style>
