@@ -1,7 +1,7 @@
 <template>
     <div class="content">
         <div class="threeDay">近3日账单</div>
-        <div v-for="(group,index) in groupList " :key="index" class="content1">
+        <div v-for="(group,index) in threeDayList " :key="index" class="content1">
             <div class="content-wrapper">
                 <div class="dateAndMoney">
                     <span>{{group.title}}</span>
@@ -44,7 +44,7 @@
       return this.$store.state.recordList;
     }
 
-    get groupList(): Result {
+    get dayGroupList(): Result {
       const newList = clone(this.recordList)
         .sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
       if (newList.length === 0) {
@@ -60,16 +60,20 @@
           result.push({title: dayjs(current.createAt).format('YYYY-MM-DD'), items: [current]});
         }
       }
+
       return result;
     }
 
+    get threeDayList() :Result{
+      const newList = clone(this.dayGroupList)
+      return newList.filter(item => dayjs(item.title).isSame(dayjs(), 'day') || dayjs(item.title).isSame(dayjs().subtract(1, 'day'), 'day') || dayjs(item.title).isSame(dayjs().subtract(2, 'day'), 'day'));
+    }
     // get expenseList() {
     //   const newList = clone(this.groupList);
     //   return newList;
     // }
 
     created(): void {
-      console.log(this.groupList);
       this.$store.commit('fetchRecord');
     }
 
