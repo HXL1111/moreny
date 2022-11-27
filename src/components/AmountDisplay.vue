@@ -185,7 +185,6 @@
                     > .income {
                     }
 
-
                     > .incomeNumber {
                         @extend %numberStyle
                     }
