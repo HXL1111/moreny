@@ -37,7 +37,6 @@
   import clone from '@/lib/clone';
   // eslint-disable-next-line no-undef
   type DayResult = { day: string, dayTotal: { expense: number, income: number }, dayItems: RecordItem[] }[]
-  type MouthResult = { mouth: string, mouthTotal: { expense: number, income: number }, mouthItems: DayResult }[]
   @Component
   export default class TagContent extends Vue {
 
@@ -69,28 +68,6 @@
       return result;
     }
 
-    mouthGrouping(dayResult:DayResult) :MouthResult{
-      const result: MouthResult = [{
-        mouth:dayjs(dayResult[0].day).format('YYYY-MM'),
-        mouthTotal:{expense:0,income:0},
-        mouthItems:[dayResult[0]]
-      }];
-      for(let i=1;i<dayResult.length;i++){
-        const current = dayResult[i]
-        const last = result[result.length-1]
-        if(dayjs(last.mouth).isSame(dayjs(current.day),'month')){
-          last.mouthItems.push(current)
-        }else {
-          result.push({
-            mouth: dayjs(current.day).format('YYYY-MM'),
-            mouthTotal: {expense: 0, income: 0},
-            mouthItems: [current]
-          })
-        }
-      }
-      return result
-    }
-
     get dayGroupList(): DayResult {
       const newList = clone(this.recordList)
         .sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
@@ -105,24 +82,6 @@
           } else {
             groupList[i].dayTotal.income += parseFloat(groupList[i].dayItems[j].notesAndAmount.amount);
           }
-        }
-      }
-      return groupList;
-    }
-
-    get mouthGroupList() :MouthResult{
-      const newList = clone(this.dayGroupList);
-      if (newList.length === 0) {
-        return [];
-      }
-      const groupList = this.mouthGrouping(newList)
-      for (let i = 0; i < groupList.length; i++) {
-        for (let j = 0; j < groupList[i].mouthItems.length; j++) {
-          if (groupList[i].mouthItems[j].dayTotal.expense) {
-            groupList[i].mouthTotal.expense += groupList[i].mouthItems[j].dayTotal.expense}
-            else if(groupList[i].mouthItems[j].dayTotal.income){
-              groupList[i].mouthTotal.income += groupList[i].mouthItems[j].dayTotal.income;
-            }
         }
       }
       return groupList;
