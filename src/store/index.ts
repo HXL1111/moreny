@@ -3,11 +3,14 @@ import Vuex from 'vuex';
 import clone from '@/lib/clone.ts';
 import createId from '@/lib/createId.ts';
 import router from '@/router';
+import dayjs from 'dayjs';
 type RootState = {
   tagList:Tag[],
   record: RecordItem,
   recordList:RecordItem[],
   currentTag?: Tag
+  // dayGroupList?: DayResult,
+  // mouthGroupList?: MouthResult
 }
 Vue.use(Vuex);
 
@@ -18,7 +21,9 @@ const store = new Vuex.Store({
       tag: [], type: '-', notesAndAmount: {notes: '', amount: '0'}, createAt: ''
     } ,
     recordList: [] ,
-    currentTag: undefined
+    currentTag: undefined,
+    // dayGroupList: undefined,
+    // mouthGroupList: undefined
   } as RootState,
 
   mutations: {
