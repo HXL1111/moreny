@@ -8,8 +8,8 @@
                     <span class="second">{{beautify(group.title) }}</span>
                 </div>
                 <div class="dateAndAmount">
-                    <span>支：2016.00</span>
-                    <span class="second">收：300.00</span>
+                    <span>支:{{group.total.expense}}</span>
+                    <span class="second"> 收:{{group.total.income}}</span>
                 </div>
             </div>
             <ol class="tagList">
@@ -21,7 +21,7 @@
                             <span class="notes">{{item.notesAndAmount.notes}}</span>
                         </div>
                     </div>
-                    <div class="money">￥{{item.notesAndAmount.amount}}</div>
+                    <div class="money" :class="{red:item.type === '-',green:item.type === '+'}">￥{{item.notesAndAmount.amount}}</div>
                 </li>
             </ol>
         </div>
@@ -34,7 +34,7 @@
   import dayjs from 'dayjs';
   import clone from '@/lib/clone';
   // eslint-disable-next-line no-undef
-  type Result = { title: string, total?: number, items: RecordItem[] }[]
+  type Result = { title: string, total: { expense: number, income: number }, items: RecordItem[] }[]
 
   @Component
   export default class TagContent extends Vue {
@@ -44,34 +44,54 @@
       return this.$store.state.recordList;
     }
 
-    get dayGroupList(): Result {
-      const newList = clone(this.recordList)
-        .sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
-      if (newList.length === 0) {
-        return [];
-      }
-      const result: Result = [{title: dayjs(newList[0].createAt).format('YYYY-MM-DD'), items: [newList[0]]}];
+    // eslint-disable-next-line no-undef
+    grouping(newList: RecordItem[]): Result {
+      const result: Result = [{
+        title: dayjs(newList[0].createAt).format('YYYY-MM-DD'),
+        total: {expense: 0, income: 0},
+        items: [newList[0]]
+      }];
       for (let i = 1; i < newList.length; i++) {
         const current = newList[i];
         const last = result[result.length - 1];
         if (dayjs(last.title).isSame(dayjs(current.createAt), 'day')) {
           last.items.push(current);
         } else {
-          result.push({title: dayjs(current.createAt).format('YYYY-MM-DD'), items: [current]});
+          result.push({
+            title: dayjs(current.createAt).format('YYYY-MM-DD'),
+            total: {expense: 0, income: 0},
+            items: [current]
+          });
         }
       }
-
       return result;
     }
 
-    get threeDayList() :Result{
-      const newList = clone(this.dayGroupList)
+    get dayGroupList(): Result {
+      const newList = clone(this.recordList)
+        .sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
+      if (newList.length === 0) {
+        return [];
+      }
+
+      const x = this.grouping(newList);
+      for(let i= 0;i<x.length;i++){
+        for (let j = 0;j<x[i].items.length;j++){
+          if (x[i].items[j].type === '-'){
+            x[i].total.expense += parseFloat(x[i].items[j].notesAndAmount.amount)
+          }else {
+            x[i].total.income += parseFloat(x[i].items[j].notesAndAmount.amount)
+          }
+        }
+      }
+      return x;
+    }
+
+    get threeDayList(): Result {
+      const newList = clone(this.dayGroupList);
       return newList.filter(item => dayjs(item.title).isSame(dayjs(), 'day') || dayjs(item.title).isSame(dayjs().subtract(1, 'day'), 'day') || dayjs(item.title).isSame(dayjs().subtract(2, 'day'), 'day'));
     }
-    // get expenseList() {
-    //   const newList = clone(this.groupList);
-    //   return newList;
-    // }
+
 
     created(): void {
       this.$store.commit('fetchRecord');
@@ -172,7 +192,12 @@
                     }
 
                     > .money {
-
+                        &.red{
+                            color: #d75b5a;
+                        }
+                        &.green{
+                            color: #539f76;
+                        }
                     }
                 }
             }
