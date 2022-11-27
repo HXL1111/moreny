@@ -128,11 +128,8 @@
       const groupList = this.mouthGrouping(newList);
       for (let i = 0; i < groupList.length; i++) {
         for (let j = 0; j < groupList[i].mouthItems.length; j++) {
-          if (groupList[i].mouthItems[j].dayTotal.expense) {
             groupList[i].mouthTotal.expense += groupList[i].mouthItems[j].dayTotal.expense;
-          } else if (groupList[i].mouthItems[j].dayTotal.income) {
             groupList[i].mouthTotal.income += groupList[i].mouthItems[j].dayTotal.income;
-          }
         }
       }
       return groupList;
