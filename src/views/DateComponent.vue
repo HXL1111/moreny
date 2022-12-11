@@ -1,13 +1,13 @@
 <template>
     <div class="wrapper">
-            <span @click="showPopup">{{currentDate}}
+            <span @click="showDatePicker" class="date">{{currentDate}}
                 <Icon name="down"/>
             </span>
         <Popup v-model="visible" position="top">
-            <DatetimePicker v-model="now"
+            <DatetimePicker v-model="lastTime"
                             type="year-month"
                             title="选择年月"
-                            @cancel="hideDatePicker"
+                            @cancel='hideDatePicker'
                             @confirm="setDate"
             />
         </Popup>
@@ -27,29 +27,43 @@
     }
   })
   export default class DateComponent extends Vue {
-    now = new Date()
-    get currentDate() :string{
+    now = new Date();
+    lastTime = this.now ;
+    get currentDate(): string {
       return dayjs(this.now).format('YYYY年MM月');
     }
-    set currentDate(value:string){
-        this.now = new Date(value)
+
+    set currentDate(value: string) {
+      this.now = new Date(value);
     }
+
     visible = false;
-    showPopup(): void {
+
+    showDatePicker(): void {
       this.visible = true;
     }
-    hideDatePicker():void{
-      this.visible =false
+
+    hideDatePicker(): void {
+      this.lastTime = this.now
+      this.visible = false;
     }
-    setDate(date:Date):void{
-      this.now = date
-      this.hideDatePicker()
+
+    setDate(date: Date): void {
+      this.now = date;
+      this.lastTime = this.now;
+      this.hideDatePicker();
     }
   }
 </script>
 
 <style lang="scss" scoped>
     .wrapper {
+        padding-top: 16px;
+
         color: #FFFFFF;
+
+        > .date {
+            padding-left: 16px;
+        }
     }
 </style>
