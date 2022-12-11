@@ -62,6 +62,7 @@
         height: 100vh;
 
         .navBar {
+
             text-align: center;
             font-size: 16px;
             padding: 12px 0;
