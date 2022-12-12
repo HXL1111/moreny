@@ -10,6 +10,9 @@
                 <Histogram class="histogramChart" :options="chartOptions"/>
             </div>
         </div>
+        <TagContent >
+                账单明细
+        </TagContent>
     </Layout>
 </template>
 
@@ -17,12 +20,12 @@
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import Layout from '@/components/Layout.vue';
-  import DateComponent from '@/views/DateComponent.vue';
   import Histogram from '@/components/Histogram.vue';
   import {EChartsOption} from 'echarts/types/dist/echarts';
-
+  import TagContent from '@/components/TagContent.vue';
+  import DateComponent from '@/components/DateComponent.vue';
   @Component({
-    components: {Histogram, DateComponent, Layout}
+    components: {TagContent, Histogram, DateComponent, Layout}
   })
   export default class Bill extends Vue {
     get chartOptions(): EChartsOption {
