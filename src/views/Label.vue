@@ -2,7 +2,7 @@
     <div class="tags">
         <div class="navBar">
             <Icon class="leftIcon" name="left" @click="goBack"/>
-            <span class="title">标签管理</span>
+            <span>标签管理</span>
             <span class="rightIcon"></span>
         </div>
         <router-link class="tag-wrapper"
@@ -36,7 +36,7 @@
       return this.$store.state.tagList;
     }
 
-    beforeCreate() :void{
+    beforeCreate(): void {
       this.$store.commit('fetchTags');
     }
 
@@ -70,9 +70,6 @@
             align-items: center;
             justify-content: space-between;
 
-            > .title {
-
-            }
 
             > .leftIcon {
                 width: 20px;

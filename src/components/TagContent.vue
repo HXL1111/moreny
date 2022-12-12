@@ -3,31 +3,60 @@
         <div class="threeDay">
             <slot/>
         </div>
-        <div v-for="(group,index) in renderList " :key="index" class="content1">
-            <div class="content-wrapper">
-                <div class="dateAndMoney">
-                    <span>{{group.day}}</span>
-                    <span class="second">{{beautify(group.day) }}</span>
+        <div v-for="(group,index) in renderList " :key="index" class="mainContent">
+            <div v-if="renderList[0].day" class="contentDiv">
+                <div class="content-wrapper">
+                    <div class="dateAndMoney">
+                        <span>{{group.day}}</span>
+                        <span class="second">{{beautify(group.day) }}</span>
+                    </div>
+                    <div class="dateAndAmount">
+                        <span>支:{{group.dayTotal.expense}}</span>
+                        <span class="second"> 收:{{group.dayTotal.income}}</span>
+                    </div>
                 </div>
-                <div class="dateAndAmount">
-                    <span>支:{{group.dayTotal.expense}}</span>
-                    <span class="second"> 收:{{group.dayTotal.income}}</span>
-                </div>
-            </div>
-            <ol class="tagList">
-                <li v-for="item in group.dayItems" :key="item.id">
-                    <div class="tag-wrapper">
-                        <span class="logo">{{tagString(item.tag).slice(0,1)}}</span>
-                        <div class="nameAndNotes">
-                            <span class="name">{{tagString(item.tag)}}</span>
-                            <span class="notes">{{item.notesAndAmount.notes}}</span>
+                <ol class="tagList">
+                    <li v-for="item in group.dayItems" :key="item.id">
+                        <div class="tag-wrapper">
+                            <span class="logo">{{tagString(item.tag).slice(0,1)}}</span>
+                            <div class="nameAndNotes">
+                                <span class="name">{{tagString(item.tag)}}</span>
+                                <span class="notes">{{item.notesAndAmount.notes}}</span>
+                            </div>
                         </div>
+                        <div class="money" :class="{red:item.type === '-',green:item.type === '+'}">
+                            ￥{{item.notesAndAmount.amount}}
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <div v-else class="contentDiv">
+                <div class="content-wrapper">
+                    <div class="dateAndMoney">
+                        <span>{{group.mouth}}</span>
+                        <span class="second">{{beautify(group.mouth) }}</span>
                     </div>
-                    <div class="money" :class="{red:item.type === '-',green:item.type === '+'}">
-                        ￥{{item.notesAndAmount.amount}}
+                    <div class="dateAndAmount">
+                        <span>支:{{group.mouthTotal.expense}}</span>
+                        <span class="second"> 收:{{group.mouthTotal.income}}</span>
                     </div>
-                </li>
-            </ol>
+                </div>
+                <ol class="tagList">
+                    <li v-for="item in group.mouthItems" :key="item.id">
+                        <div class="tag-wrapper">
+                            <span class="logo">{{tagString(item.tag).slice(0,1)}}</span>
+                            <div class="nameAndNotes">
+                                <span class="name">{{tagString(item.tag)}}</span>
+                                <span class="notes">{{item.notesAndAmount.notes}}</span>
+                            </div>
+                        </div>
+                        <div class="money" :class="{red:item.type === '-',green:item.type === '+'}">
+                            ￥{{item.notesAndAmount.amount}}
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
         </div>
     </div>
 </template>
@@ -40,8 +69,7 @@
   @Component
   export default class TagContent extends Vue {
     // eslint-disable-next-line no-undef
-    @Prop() renderList?: DayResult;
-
+    @Prop() renderList?: DayResult | MouthResult;
 
     // eslint-disable-next-line no-undef
     tagString(tag: Tag[]): string {
@@ -78,75 +106,78 @@
             padding-bottom: 14px;
         }
 
-        > .content1 {
-
-            > .content-wrapper {
-                font-size: 10px;
-                color: #7d7c80;
-                display: flex;
-                justify-content: space-between;
-                padding-top: 4px;
-                padding-bottom: 10px;
-
-                > .dateAndMoney {
-                    > .second {
-                        padding-left: $leftPadding;
-                    }
-                }
-
-            }
-
-            > .tagList {
-                > li {
+        > .mainContent {
+            > .contentDiv {
+                > .content-wrapper {
+                    font-size: 10px;
+                    color: #7d7c80;
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 16px;
+                    padding-top: 4px;
+                    padding-bottom: 10px;
 
-                    > .tag-wrapper {
+                    > .dateAndMoney {
+                        > .second {
+                            padding-left: $leftPadding;
+                        }
+                    }
+
+                }
+
+                > .tagList {
+                    > li {
                         display: flex;
+                        justify-content: space-between;
                         align-items: center;
-                        color: $color-highLight;
+                        margin-bottom: 16px;
 
-
-                        %font {
-                            width: 38px;
-                            height: 38px;
-                            line-height: 38px;
-                        }
-
-                        > .logo {
-                            background: #515151;
-                            text-align: center;
-                            font-size: 15px;
-                            @extend %font;
-                            border-radius: 50%;
-                        }
-
-                        > .nameAndNotes {
-                            padding-left: 12px;
+                        > .tag-wrapper {
                             display: flex;
-                            flex-direction: column;
+                            align-items: center;
+                            color: $color-highLight;
 
-                            > .notes {
-                                transform: scale(0.9);
-                                font-size: 12px;
-                                color: #c6c6c6;
+
+                            %font {
+                                width: 38px;
+                                height: 38px;
+                                line-height: 38px;
+                            }
+
+                            > .logo {
+                                background: #515151;
+                                text-align: center;
+                                font-size: 15px;
+                                @extend %font;
+                                border-radius: 50%;
+                            }
+
+                            > .nameAndNotes {
+                                padding-left: 12px;
+                                display: flex;
+                                flex-direction: column;
+
+                                > .notes {
+                                    transform: scale(0.9);
+                                    font-size: 12px;
+                                    color: #c6c6c6;
+                                }
+                            }
+                        }
+
+                        > .money {
+                            &.red {
+                                color: #d75b5a;
+                            }
+
+                            &.green {
+                                color: #539f76;
                             }
                         }
                     }
-
-                    > .money {
-                        &.red {
-                            color: #d75b5a;
-                        }
-
-                        &.green {
-                            color: #539f76;
-                        }
-                    }
                 }
             }
+
+
         }
     }
 </style>

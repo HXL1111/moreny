@@ -4,13 +4,11 @@ import clone from '@/lib/clone.ts';
 import createId from '@/lib/createId.ts';
 import router from '@/router';
 
-
 type RootState = {
   tagList: Tag[],
   record: RecordItem,
   recordList: RecordItem[],
   currentTag?: Tag
-
 
 }
 Vue.use(Vuex);

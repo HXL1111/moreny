@@ -20,7 +20,7 @@
   import dayjs from 'dayjs';
   import clone from '@/lib/clone';
   import _sort from '@/lib/_sort';
-    import dayGrouping from '@/lib/dayDrouping';
+    import dayGrouping from '@/lib/dayGrouping';
   @Component({
     components: {TagContent, Button, AmountDisplay, Layout}
   })
@@ -31,7 +31,6 @@
     // eslint-disable-next-line no-undef
     get recordList(): RecordItem[] {
       return this.$store.state.recordList;
-
     }
     // eslint-disable-next-line no-undef
     get threeDayList(): DayResult {
@@ -41,7 +40,6 @@
       }
       return clone(dayGrouping(newList)).filter(item => dayjs(item.day).isSame(dayjs(), 'day') || dayjs(item.day).isSame(dayjs().subtract(1, 'day'), 'day') || dayjs(item.day).isSame(dayjs().subtract(2, 'day'), 'day'));
     }
-
   }
 </script>
 

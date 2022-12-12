@@ -2,7 +2,7 @@
     <div class="editLabel">
         <div class="navBar">
             <Icon class="leftIcon" name="left" @click="goBack"/>
-            <span class="title">编辑标签</span>
+            <span>编辑标签</span>
             <span class="rightIcon"></span>
         </div>
         <div class="formItem-wrapper">
@@ -45,7 +45,7 @@
 
     update(name: string): void {
       this.$store.commit('updateTag', {id: this.currentTag.id, name});
-      this.goBack()
+      this.goBack();
     }
 
     remove(): void {
@@ -73,11 +73,6 @@
             align-items: center;
             justify-content: space-between;
 
-
-            > .title {
-
-            }
-
             > .leftIcon {
                 width: 20px;
                 height: 20px;
@@ -98,11 +93,6 @@
                 line-height: 52px;
                 padding: 0 18px;
             }
-
-
         }
-
     }
-
-
 </style>
