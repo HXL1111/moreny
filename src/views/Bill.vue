@@ -1,7 +1,7 @@
 <template>
     <Layout>
         <div class="wrapper">
-            <DateComponent/>
+            <DateComponent @update:value="onUpdateMonth"/>
             <div class="histogramChart_wrapper">
                 <div class="amount">
                     <span>月支出 <span class="expense">￥1111</span></span>
@@ -10,8 +10,8 @@
                 <Histogram class="histogramChart" :options="chartOptions"/>
             </div>
         </div>
-        <TagContent >
-                账单明细
+        <TagContent :render-list="renderList">
+            账单明细
         </TagContent>
     </Layout>
 </template>
@@ -24,10 +24,55 @@
   import {EChartsOption} from 'echarts/types/dist/echarts';
   import TagContent from '@/components/TagContent.vue';
   import DateComponent from '@/components/DateComponent.vue';
+  import _sort from '@/lib/_sort';
+  import dayGrouping from '@/lib/dayGrouping';
+  import clone from '@/lib/clone';
+  import monthGrouping from '@/lib/monthGrouping';
+  import dayjs from 'dayjs';
+
   @Component({
     components: {TagContent, Histogram, DateComponent, Layout}
   })
   export default class Bill extends Vue {
+    month: Date = new Date()
+
+    onUpdateMonth(value: Date): void {
+      this.month = value;
+    }
+
+    created(): void {
+      this.$store.commit('fetchRecord');
+    }
+
+    // eslint-disable-next-line no-undef
+    get recordList(): RecordItem[] {
+      return this.$store.state.recordList;
+    }
+
+    // eslint-disable-next-line no-undef
+    get dayList(): DayResult {
+      const newList = _sort(this.recordList);
+      if (newList.length === 0) {
+        return [];
+      }
+      return dayGrouping(newList);
+    }
+    // eslint-disable-next-line no-undef
+    get monthList():MouthResult{
+      if(this.dayList.length === 0){
+        return []
+      }
+      return monthGrouping(clone(this.dayList))
+    }
+    // eslint-disable-next-line no-undef
+    get renderList():DayResult{
+      const renderItem = this.monthList.find(item=>dayjs(item.mouth).isSame(this.month,'month'))
+      if(!renderItem){
+        return []
+      }else {
+        return renderItem.mouthItems
+      }
+    }
     get chartOptions(): EChartsOption {
       return {
         grid: {
@@ -117,8 +162,9 @@
             border-radius: 10px;
         }
     }
-.wrapper{
-    color: #FFFFFF;
 
-}
+    .wrapper {
+        color: #FFFFFF;
+
+    }
 </style>
