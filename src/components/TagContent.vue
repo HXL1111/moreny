@@ -76,7 +76,7 @@
       return tag.length === 0 ? '无' : tag.map(t => t.name).join(',');
     }
 
-    beautify(string: string): string {
+    beautify(string: string): string | undefined{
       const day = dayjs(string);
       const now = dayjs();
       if (day.isSame(now, 'day')) {
@@ -86,9 +86,24 @@
       } else if (day.isSame(now.subtract(2, 'day'), 'day')) {
         return '前天';
       } else if (day.isSame(now, 'year')) {
-        return day.format('M月D日');
-      } else {
-        return day.format('YYYY年M月D日');
+        const EName = day.format('dd');
+        let CName = '';
+        if (EName === 'Mo') {
+          return CName = '星期一';
+        } else if (EName === 'Tu') {
+          return CName = '星期二';
+        } else if (EName === 'We') {
+          return CName = '星期三';
+        } else if (EName === 'Th') {
+          return CName = '星期四';
+        } else if (EName === 'Fr') {
+          return CName = '星期五';
+        } else if (EName === 'Sa') {
+          return CName = '星期六';
+        } else if (EName === 'Su') {
+          return CName = '星期日';
+        }
+        return CName;
       }
     }
   }
