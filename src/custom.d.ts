@@ -11,10 +11,10 @@ type DayResult = {
   day: string,
   dayTotal: { expense: number, income: number },
   dayItems: RecordItem[]
-}[]
+}
 
-type MouthResult = {
-  mouth: string,
-  mouthTotal: { expense: number, income: number },
-  mouthItems: DayResult
-}[]
+type MonthResult = {
+  month: string,
+  monthTotal: { expense: number, income: number },
+  monthItems: DayResult[]
+}

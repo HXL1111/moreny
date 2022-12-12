@@ -33,7 +33,7 @@
       return this.$store.state.recordList;
     }
     // eslint-disable-next-line no-undef
-    get threeDayList(): DayResult {
+    get threeDayList(): DayResult[] {
       const newList = _sort(this.recordList)
       if (newList.length === 0) {
         return [];

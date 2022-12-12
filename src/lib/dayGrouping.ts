@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 export default function dayGrouping(list:RecordItem[]){
-  const dayResult: DayResult = [{
+  const dayResult: DayResult[] = [{
     day: dayjs(list[0].createAt).format('YYYY-MM-DD'),
     dayTotal: {expense: 0, income: 0},
     dayItems: [list[0]]

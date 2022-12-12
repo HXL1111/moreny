@@ -33,16 +33,16 @@
             <div v-else class="contentDiv">
                 <div class="content-wrapper">
                     <div class="dateAndMoney">
-                        <span>{{group.mouth}}</span>
-                        <span class="second">{{beautify(group.mouth) }}</span>
+                        <span>{{group.month}}</span>
+                        <span class="second">{{beautify(group.month) }}</span>
                     </div>
                     <div class="dateAndAmount">
-                        <span>支:{{group.mouthTotal.expense}}</span>
-                        <span class="second"> 收:{{group.mouthTotal.income}}</span>
+                        <span>支:{{group.monthTotal.expense}}</span>
+                        <span class="second"> 收:{{group.monthTotal.income}}</span>
                     </div>
                 </div>
                 <ol class="tagList">
-                    <li v-for="item in group.mouthItems" :key="item.id">
+                    <li v-for="item in group.monthItems" :key="item.id">
                         <div class="tag-wrapper">
                             <span class="logo">{{tagString(item.tag).slice(0,1)}}</span>
                             <div class="nameAndNotes">
@@ -69,7 +69,7 @@
   @Component
   export default class TagContent extends Vue {
     // eslint-disable-next-line no-undef
-    @Prop() renderList?: DayResult | MouthResult;
+    @Prop() renderList?: DayResult[] | MonthResult[];
 
     // eslint-disable-next-line no-undef
     tagString(tag: Tag[]): string {

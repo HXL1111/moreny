@@ -4,13 +4,13 @@
             <DateComponent @update:value="onUpdateMonth"/>
             <div class="histogramChart_wrapper">
                 <div class="amount">
-                    <span>月支出 <span class="expense">￥1111</span></span>
-                    <span>月收入 <span class="income">￥111</span></span>
+                    <span>月支出 <span class="expense">￥{{renderList.monthTotal.expense}}</span></span>
+                    <span>月收入 <span class="income">￥{{renderList.monthTotal.income}}</span></span>
                 </div>
                 <Histogram class="histogramChart" :options="chartOptions"/>
             </div>
         </div>
-        <TagContent :render-list="renderList">
+        <TagContent :render-list="renderList.monthItems">
             账单明细
         </TagContent>
     </Layout>
@@ -34,14 +34,15 @@
     components: {TagContent, Histogram, DateComponent, Layout}
   })
   export default class Bill extends Vue {
-    month: Date = new Date()
+    now: Date = new Date();
 
     onUpdateMonth(value: Date): void {
-      this.month = value;
+      this.now = value;
     }
 
     created(): void {
       this.$store.commit('fetchRecord');
+
     }
 
     // eslint-disable-next-line no-undef
@@ -50,30 +51,43 @@
     }
 
     // eslint-disable-next-line no-undef
-    get dayList(): DayResult {
+    get dayList(): DayResult[] {
       const newList = _sort(this.recordList);
       if (newList.length === 0) {
         return [];
       }
       return dayGrouping(newList);
     }
+
     // eslint-disable-next-line no-undef
-    get monthList():MouthResult{
-      if(this.dayList.length === 0){
-        return []
+    get monthList(): MonthResult[] {
+      if (this.dayList.length === 0) {
+        return [];
       }
-      return monthGrouping(clone(this.dayList))
+      return monthGrouping(clone(this.dayList));
     }
+
     // eslint-disable-next-line no-undef
-    get renderList():DayResult{
-      const renderItem = this.monthList.find(item=>dayjs(item.mouth).isSame(this.month,'month'))
-      if(!renderItem){
-        return []
-      }else {
-        return renderItem.mouthItems
+    get renderList(): MonthResult | undefined {
+      const renderItem = clone(this.monthList).filter(item => dayjs(item.month).isSame(this.now, 'month'));
+      if (!renderItem) {
+        return undefined;
+      } else {
+        return renderItem[0];
       }
     }
+
     get chartOptions(): EChartsOption {
+      const firstDay = dayjs(this.now).subtract(dayjs(this.now).get('date') - 1, 'day');
+      const array = [];
+      for (let i = 0; i < dayjs(this.now).daysInMonth(); i++) {
+        const dateString = dayjs(firstDay).add(i, 'day').format('YYYY-MM-DD');
+        const found = this.renderList?.monthItems.find(item => item.day === dateString);
+        array.push({key: dateString, value: found ? found.dayTotal : {expense: 0, income: 0}});
+      }
+      const keys = array.map(item => dayjs(item.key).format('D日'));
+      const expenseValues = array.map(item => item.value.expense);
+      const incomeValues = array.map(item => item.value.income);
       return {
         grid: {
           height: '130px',
@@ -82,12 +96,9 @@
           left: '10px',
           right: '10px'
         },
+        tooltip: {},
         xAxis: {
-          data: [
-            '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-            '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-            '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
-          ],
+          data: keys,
           alignTicks: true,
           axisTick: {
             show: false,
@@ -100,12 +111,12 @@
           axisLabel: {
             show: true,
             interval: 6,
-            color: '#3f3f3f'
+            color: '#3f3f3f',
           },
         },
         yAxis: {
+          type: 'value',
           show: false,
-
         },
         series: [{
           name: '支出',
@@ -115,7 +126,7 @@
             borderRadius: [5, 5, 0, 0],
             color: '#ef5155'
           },
-          data: [5, 20, 36, 10, 10, 20],
+          data: expenseValues,
         },
           {
             name: '收入',
@@ -125,7 +136,7 @@
               borderRadius: [2, 2, 0, 0],
               color: '#509e6e'
             },
-            data: [5, 20, 36, 10, 10, 20, 5, 20, 36, 10, 10, 20,],
+            data: incomeValues,
           },
 
         ]
@@ -156,7 +167,6 @@
         height: 160px;
 
         &_wrapper {
-
             background: #252525;
             margin: 16px;
             border-radius: 10px;
@@ -165,6 +175,5 @@
 
     .wrapper {
         color: #FFFFFF;
-
     }
 </style>
