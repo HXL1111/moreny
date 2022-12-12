@@ -1,7 +1,9 @@
 <template>
     <div class="content">
-        <div class="threeDay">近3日账单</div>
-        <div v-for="(group,index) in threeDayList " :key="index" class="content1">
+        <div class="threeDay">
+            <slot/>
+        </div>
+        <div v-for="(group,index) in renderList " :key="index" class="content1">
             <div class="content-wrapper">
                 <div class="dateAndMoney">
                     <span>{{group.day}}</span>
@@ -32,70 +34,14 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import {Component, Prop} from 'vue-property-decorator';
   import dayjs from 'dayjs';
-  import clone from '@/lib/clone';
-  // eslint-disable-next-line no-undef
-  type DayResult = { day: string, dayTotal: { expense: number, income: number }, dayItems: RecordItem[] }[]
+
   @Component
   export default class TagContent extends Vue {
-
     // eslint-disable-next-line no-undef
-    get recordList(): RecordItem[] {
-      return this.$store.state.recordList;
-    }
+    @Prop() renderList?: DayResult;
 
-    // eslint-disable-next-line no-undef
-    dayGrouping(newList: RecordItem[]): DayResult {
-      const result: DayResult = [{
-        day: dayjs(newList[0].createAt).format('YYYY-MM-DD'),
-        dayTotal: {expense: 0, income: 0},
-        dayItems: [newList[0]]
-      }];
-      for (let i = 1; i < newList.length; i++) {
-        const current = newList[i];
-        const last = result[result.length - 1];
-        if (dayjs(last.day).isSame(dayjs(current.createAt), 'day')) {
-          last.dayItems.push(current);
-        } else {
-          result.push({
-            day: dayjs(current.createAt).format('YYYY-MM-DD'),
-            dayTotal: {expense: 0, income: 0},
-            dayItems: [current]
-          });
-        }
-      }
-      return result;
-    }
-
-    get dayGroupList(): DayResult {
-      const newList = clone(this.recordList)
-        .sort((a, b) => dayjs(b.createAt).valueOf() - dayjs(a.createAt).valueOf());
-      if (newList.length === 0) {
-        return [];
-      }
-      const groupList = this.dayGrouping(newList);
-      for (let i = 0; i < groupList.length; i++) {
-        for (let j = 0; j < groupList[i].dayItems.length; j++) {
-          if (groupList[i].dayItems[j].type === '-') {
-            groupList[i].dayTotal.expense += parseFloat(groupList[i].dayItems[j].notesAndAmount.amount);
-          } else {
-            groupList[i].dayTotal.income += parseFloat(groupList[i].dayItems[j].notesAndAmount.amount);
-          }
-        }
-      }
-      return groupList;
-    }
-
-    get threeDayList(): DayResult {
-      const newList = clone(this.dayGroupList);
-      return newList.filter(item => dayjs(item.day).isSame(dayjs(), 'day') || dayjs(item.day).isSame(dayjs().subtract(1, 'day'), 'day') || dayjs(item.day).isSame(dayjs().subtract(2, 'day'), 'day'));
-    }
-
-
-    created(): void {
-      this.$store.commit('fetchRecord');
-    }
 
     // eslint-disable-next-line no-undef
     tagString(tag: Tag[]): string {
@@ -123,7 +69,6 @@
 
 <style lang="scss" scoped>
     @import "~@/assets/style/helper.scss";
-
 
     .content {
         padding: 0 18px;
