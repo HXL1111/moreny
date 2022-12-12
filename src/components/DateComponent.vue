@@ -27,6 +27,7 @@
     }
   })
   export default class DateComponent extends Vue {
+
     now = new Date();
     lastTime = this.now ;
     get currentDate(): string {
@@ -52,6 +53,7 @@
       this.now = date;
       this.lastTime = this.now;
       this.hideDatePicker();
+      this.$emit('update:value',this.now)
     }
   }
 </script>
