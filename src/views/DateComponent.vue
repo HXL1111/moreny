@@ -60,8 +60,6 @@
     .wrapper {
         padding-top: 16px;
 
-        color: #FFFFFF;
-
         > .date {
             padding-left: 16px;
         }
