@@ -2,7 +2,8 @@
     <Layout>
         <div class="wrapper">
             <DateComponent @update:value="onUpdateMonth" class="month"/>
-            <Chart class="chart" :options="chartOptions">
+            <Chart class="chart" :options="chartOptions" @update:isShowExpense="onUpdateExpense"
+                   @update:isShowIncome="onUpdateIncome">
                 <template v-slot:expense>
                     ￥{{renderList[0]?.monthTotal?.expense||0}}
                 </template>
@@ -42,6 +43,24 @@
   })
   export default class Bill extends Vue {
     now: Date = new Date();
+    expenseVisible:0|1 = 1;
+    incomeVisible: 0|1 = 0;
+
+    onUpdateExpense(value: { expenseSelected: boolean }): void {
+      if (value.expenseSelected) {
+        this.expenseVisible = 1;
+      } else {
+        this.expenseVisible = 0;
+      }
+    }
+
+    onUpdateIncome(value: { incomeSelected: boolean }): void {
+      if (value.incomeSelected) {
+        this.incomeVisible = 1;
+      } else {
+        this.incomeVisible = 0;
+      }
+    }
 
     onUpdateMonth(value: Date): void {
       this.now = value;
@@ -134,21 +153,21 @@
           barGap: '100%',
           itemStyle: {
             borderRadius: [5, 5, 0, 0],
-            color: '#ef5155'
+            color: '#ef5155',
+            opacity: this.expenseVisible
           },
           data: expenseValues,
         },
           {
             name: '收入',
             type: 'bar',
-
             itemStyle: {
               borderRadius: [2, 2, 0, 0],
-              color: '#509e6e'
+              color: '#509e6e',
+              opacity: this.incomeVisible
             },
             data: incomeValues,
           },
-
         ]
       };
     }
@@ -164,7 +183,8 @@
     .wrapper {
         color: #FFFFFF;
         position: relative;
-        >.month{
+
+        > .month {
             position: sticky;
             top: 0;
             z-index: 100;

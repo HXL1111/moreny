@@ -28,11 +28,12 @@
 
     expenseToggle(): void {
       this.expenseSelected = !this.expenseSelected;
-
+      this.$emit('update:isShowExpense', {expenseSelected: this.expenseSelected});
     }
 
     incomeToggle(): void {
       this.incomeSelected = !this.incomeSelected;
+      this.$emit('update:isShowIncome', {incomeSelected: this.incomeSelected});
     }
 
     mounted(): void | Error {
@@ -77,6 +78,7 @@
                     width: 6px;
                     height: 6px;
                     border-radius: 50%;
+
                     &.selected {
                         background: white;
                     }
