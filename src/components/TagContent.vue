@@ -1,14 +1,13 @@
 <template>
     <div class="content">
         <div class="threeDay">
-            <slot/>
+            <slot name="title"/>
         </div>
         <div v-if="!renderList[0]">
             <div class="emptyContent">
                 <Icon name="emptyBill" class="icon"/>
                 <div class="text">
-                    <span>三日内未发现账单哦，试着记一笔~</span>
-                    <span>底部账单页面查看历史账单哦~</span>
+                    <slot name="text"/>
                 </div>
             </div>
         </div>
@@ -78,7 +77,7 @@
   @Component
   export default class TagContent extends Vue {
     // eslint-disable-next-line no-undef
-    @Prop() renderList?: DayResult[] | MonthResult[];
+    @Prop() renderList: DayResult[] | MonthResult[] | undefined;
 
     // eslint-disable-next-line no-undef
     tagString(tag: Tag[]): string {
@@ -121,25 +120,28 @@
 
 <style lang="scss" scoped>
     @import "~@/assets/style/helper.scss";
-.emptyContent{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-top: 64px;
-    >.icon{
-        fill: white;
-        width: 64px;
-        height: 64px;
-    }
-    >.text{
-        padding-top: 16px;
+
+    .emptyContent {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        padding-top: 64px;
+
+        > .icon {
+            fill: white;
+            width: 64px;
+            height: 64px;
+        }
+
+        > .text {
+            padding-top: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
     }
-}
 
     .content {
         padding: 0 18px;

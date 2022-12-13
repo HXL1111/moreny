@@ -4,14 +4,19 @@
             <DateComponent @update:value="onUpdateMonth"/>
             <div class="chart_wrapper">
                 <div class="amount">
-                    <span>月支出 <span class="expense">￥{{renderList.monthTotal.expense }}</span></span>
-                    <span>月收入 <span class="income">￥{{renderList.monthTotal.income }}</span></span>
+                    <span>月支出 <span class="expense">￥{{renderList[0]?.monthTotal?.expense||0}}</span></span>
+                    <span>月收入 <span class="income">￥{{renderList[0]?.monthTotal?.income||0}}</span></span>
                 </div>
                 <Chart class="chart" :options="chartOptions"/>
             </div>
         </div>
-        <TagContent :render-list="renderList.monthItems">
-            账单明细
+        <TagContent :render-list="renderList[0]||[]">
+            <template v-slot:title>
+                账单明细
+            </template>
+            <template v-slot:text>
+                <span>未发现账单哦，试着记一笔~</span>
+            </template>
         </TagContent>
     </Layout>
 </template>
@@ -43,7 +48,6 @@
 
     created(): void {
       this.$store.commit('fetchRecord');
-
     }
 
     // eslint-disable-next-line no-undef
@@ -69,23 +73,24 @@
     }
 
     // eslint-disable-next-line no-undef
-    get renderList(): MonthResult | undefined {
+    get renderList(): MonthResult[] {
       const renderItem = clone(this.monthList).filter(item => dayjs(item.month).isSame(this.now, 'month'));
       if (!renderItem) {
-        return undefined;
+        return [];
       } else {
-        return renderItem[0];
+        return renderItem;
       }
     }
-    get keyValueList():{key: string, value: {expense: number, income: number}}[]{
+
+    get keyValueList(): { key: string, value: { expense: number, income: number } }[] {
       const firstDay = dayjs(this.now).subtract(dayjs(this.now).get('date') - 1, 'day');
       const array = [];
       for (let i = 0; i < dayjs(this.now).daysInMonth(); i++) {
         const dateString = dayjs(firstDay).add(i, 'day').format('YYYY-MM-DD');
-        const found = this.renderList?.monthItems.find(item => item.day === dateString);
+        const found = this.renderList[0]?.monthItems.find(item => item.day === dateString);
         array.push({key: dateString, value: found ? found.dayTotal : {expense: 0, income: 0}});
       }
-      return array
+      return array;
     }
 
     get chartOptions(): EChartsOption {
@@ -156,6 +161,7 @@
         justify-content: space-between;
         align-items: center;
         font-size: 14px;
+
         > span {
             > .expense {
                 color: #ef5155;

@@ -4,8 +4,14 @@
         <router-link to="/home/money">
             <Button>记一笔</Button>
         </router-link>
-        <TagContent :render-list="threeDayList" >
-            近 3 日账单
+        <TagContent :render-list="threeDayList">
+            <template v-slot:title>
+                近 3 日账单
+            </template>
+            <template v-slot:text>
+                <span>三日内未发现账单哦，试着记一笔~</span>
+                <span>底部账单页面查看历史账单哦~</span>
+            </template>
         </TagContent>
     </Layout>
 </template>
