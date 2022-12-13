@@ -2,14 +2,15 @@
     <div class="tagList-wrapper">
         <ol class="tag-wrapper">
             <li v-for="tag in tagList" :key="tag.id">
-                <span class="tag-wrapper"
+                <span class="tagLogo"
                       @click="select(tag)"
-                      :class="{selected: selectedTags.indexOf(tag)>=0}">{{tag.name.slice(0,1)}}
+                      :class="{selected: selectedTags.indexOf(tag)>=0}">
+                    <span>{{tag.name.slice(0,1)}}</span>
                 </span>
                 <span class="tagName">{{tag.name}}</span>
             </li>
             <li>
-                <router-link to="/home/money/label" class="tag-wrapper">
+                <router-link to="/home/money/label" class="tagLogo">
                     <Icon name="edit"/>
                 </router-link>
                 <span class="tagName">编辑</span>
@@ -78,12 +79,14 @@
                 justify-content: center;
                 align-items: center;
 
-                > .tag-wrapper {
+                > .tagLogo {
                     background: #515151;
                     border-radius: 50%;
                     height: 40px;
                     width: 40px;
-
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                     &.selected {
                         background: #dddedf;
                         color: black;

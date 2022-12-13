@@ -10,7 +10,7 @@
                 <Chart class="chart" :options="chartOptions"/>
             </div>
         </div>
-        <TagContent :render-list="renderList[0]||[]">
+        <TagContent :render-list="renderList[0]?.monthItems || []">
             <template v-slot:title>
                 账单明细
             </template>

@@ -12,7 +12,7 @@
             </div>
         </div>
         <div v-for="(group,index) in renderList " :key="index" class="mainContent">
-            <div v-if="renderList[0].day" class="contentDiv">
+            <div class="contentDiv">
                 <div class="content-wrapper">
                     <div class="dateAndMoney">
                         <span>{{group.day}}</span>
@@ -38,33 +38,6 @@
                     </li>
                 </ol>
             </div>
-            <div v-else-if="renderList[0].month" class="contentDiv">
-                <div class="content-wrapper">
-                    <div class="dateAndMoney">
-                        <span>{{group.month}}</span>
-                        <span class="second">{{beautify(group.month) }}</span>
-                    </div>
-                    <div class="dateAndAmount">
-                        <span>支:{{group.monthTotal.expense}}</span>
-                        <span class="second"> 收:{{group.monthTotal.income}}</span>
-                    </div>
-                </div>
-                <ol class="tagList">
-                    <li v-for="item in group.monthItems" :key="item.id">
-                        <div class="tag-wrapper">
-                            <span class="logo">{{tagString(item.tag).slice(0,1)}}</span>
-                            <div class="nameAndNotes">
-                                <span class="name">{{tagString(item.tag)}}</span>
-                                <span class="notes">{{item.notesAndAmount.notes}}</span>
-                            </div>
-                        </div>
-                        <div class="money" :class="{red:item.type === '-',green:item.type === '+'}">
-                            ￥{{item.notesAndAmount.amount}}
-                        </div>
-                    </li>
-                </ol>
-            </div>
-
         </div>
     </div>
 </template>
@@ -77,7 +50,7 @@
   @Component
   export default class TagContent extends Vue {
     // eslint-disable-next-line no-undef
-    @Prop() renderList: DayResult[] | MonthResult[] | undefined;
+    @Prop() renderList: DayResult[] | undefined;
 
     // eslint-disable-next-line no-undef
     tagString(tag: Tag[]): string {
