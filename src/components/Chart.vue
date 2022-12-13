@@ -1,7 +1,7 @@
 <template>
     <div class="chart_wrapper">
         <div class="amount">
-            <span>月支出 <span class="expense"><slot name="expense"/></span></span>
+            <span >月支出 <span class="expense"><slot name="expense"/></span></span>
             <span>月收入 <span class="income"><slot name="income"/></span></span>
         </div>
         <div class="chart" ref="chart"></div>
@@ -54,7 +54,7 @@
         }
     }
    .chart{
-      height: 600px;
+      height: 400px;
        &_wrapper{
            background: #252525;
            margin: 0 16px 16px 16px;
