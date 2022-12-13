@@ -1,7 +1,7 @@
 <template>
     <Layout>
         <div class="wrapper">
-            <DateComponent @update:value="onUpdateMonth"/>
+            <DateComponent @update:value="onUpdateMonth" class="month"/>
             <Chart class="chart" :options="chartOptions">
                 <template v-slot:expense>
                     ￥{{renderList[0]?.monthTotal?.expense||0}}
@@ -163,5 +163,11 @@
 
     .wrapper {
         color: #FFFFFF;
+        position: relative;
+        >.month{
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
     }
 </style>

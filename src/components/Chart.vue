@@ -54,10 +54,10 @@
         }
     }
    .chart{
-       height: 400px;
+      height: 600px;
        &_wrapper{
            background: #252525;
-           margin: 16px;
+           margin: 0 16px 16px 16px;
            border-radius: 10px;
        }
    }

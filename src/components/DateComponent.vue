@@ -60,8 +60,8 @@
 
 <style lang="scss" scoped>
     .wrapper {
-        padding-top: 16px;
-
+        padding: 16px 0;
+        background: #0f0f0f;
         > .date {
             padding-left: 16px;
         }
