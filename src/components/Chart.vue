@@ -11,15 +11,16 @@
   @Component({
     components: {echarts}
   })
-  export default class Histogram extends Vue {
-    @Prop() options?: EChartsOption
-    mounted():void|Error{
-    const myChart = echarts.init(this.$refs.wrapper as HTMLDivElement);
-    if( this.options === undefined){
-     return new Error('options 不存在')
-    }else{
-      myChart.setOption(this.options)
-    }
+  export default class Chart extends Vue {
+    @Prop() options?: EChartsOption;
+
+    mounted(): void | Error {
+      const myChart = echarts.init(this.$refs.wrapper as HTMLDivElement);
+      if (this.options === undefined) {
+        return new Error('options 不存在');
+      } else {
+        myChart.setOption(this.options);
+      }
     }
   }
 </script>

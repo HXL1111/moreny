@@ -3,6 +3,15 @@
         <div class="threeDay">
             <slot/>
         </div>
+        <div v-if="!renderList[0]">
+            <div class="emptyContent">
+                <Icon name="emptyBill" class="icon"/>
+                <div class="text">
+                    <span>三日内未发现账单哦，试着记一笔~</span>
+                    <span>底部账单页面查看历史账单哦~</span>
+                </div>
+            </div>
+        </div>
         <div v-for="(group,index) in renderList " :key="index" class="mainContent">
             <div v-if="renderList[0].day" class="contentDiv">
                 <div class="content-wrapper">
@@ -30,7 +39,7 @@
                     </li>
                 </ol>
             </div>
-            <div v-else class="contentDiv">
+            <div v-else-if="renderList[0].month" class="contentDiv">
                 <div class="content-wrapper">
                     <div class="dateAndMoney">
                         <span>{{group.month}}</span>
@@ -76,7 +85,7 @@
       return tag.length === 0 ? '无' : tag.map(t => t.name).join(',');
     }
 
-    beautify(string: string): string | undefined{
+    beautify(string: string): string | undefined {
       const day = dayjs(string);
       const now = dayjs();
       if (day.isSame(now, 'day')) {
@@ -112,6 +121,25 @@
 
 <style lang="scss" scoped>
     @import "~@/assets/style/helper.scss";
+.emptyContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 64px;
+    >.icon{
+        fill: white;
+        width: 64px;
+        height: 64px;
+    }
+    >.text{
+        padding-top: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
 
     .content {
         padding: 0 18px;

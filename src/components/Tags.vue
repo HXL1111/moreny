@@ -65,13 +65,12 @@
             align-items: center;
             justify-content: flex-start;
             flex-wrap: wrap;
-            padding: 18px;
+            padding: 16px;
             color: $color-highLight;
 
             > li {
-                margin: 14px 0;
+                margin-bottom: 14px ;
                 width: 20%;
-                height: 40px;
                 display: flex;
                 flex-direction: column;
                 text-align: center;

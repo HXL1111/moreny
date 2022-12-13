@@ -1,7 +1,7 @@
 <template>
     <div class="numberPad">
         <div class="output-wrapper">
-            <FormItem placeholder="请输入备注(最多150字)"
+            <FormItem placeholder="请输入备注"
                         :value="$store.state.record.notesAndAmount.notes"
                       @update:value="onUpdateNotes"
             >

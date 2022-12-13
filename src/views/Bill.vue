@@ -2,12 +2,12 @@
     <Layout>
         <div class="wrapper">
             <DateComponent @update:value="onUpdateMonth"/>
-            <div class="histogramChart_wrapper">
+            <div class="chart_wrapper">
                 <div class="amount">
-                    <span>月支出 <span class="expense">￥{{renderList.monthTotal.expense}}</span></span>
-                    <span>月收入 <span class="income">￥{{renderList.monthTotal.income}}</span></span>
+                    <span>月支出 <span class="expense">￥{{renderList.monthTotal.expense }}</span></span>
+                    <span>月收入 <span class="income">￥{{renderList.monthTotal.income }}</span></span>
                 </div>
-                <Histogram class="histogramChart" :options="chartOptions"/>
+                <Chart class="chart" :options="chartOptions"/>
             </div>
         </div>
         <TagContent :render-list="renderList.monthItems">
@@ -20,7 +20,7 @@
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import Layout from '@/components/Layout.vue';
-  import Histogram from '@/components/Histogram.vue';
+  import Histogram from '@/components/Chart.vue';
   import {EChartsOption} from 'echarts/types/dist/echarts';
   import TagContent from '@/components/TagContent.vue';
   import DateComponent from '@/components/DateComponent.vue';
@@ -29,9 +29,10 @@
   import clone from '@/lib/clone';
   import monthGrouping from '@/lib/monthGrouping';
   import dayjs from 'dayjs';
+  import Chart from '@/components/Chart.vue';
 
   @Component({
-    components: {TagContent, Histogram, DateComponent, Layout}
+    components: {Chart, TagContent, Histogram, DateComponent, Layout}
   })
   export default class Bill extends Vue {
     now: Date = new Date();
@@ -76,8 +77,7 @@
         return renderItem[0];
       }
     }
-
-    get chartOptions(): EChartsOption {
+    get keyValueList():{key: string, value: {expense: number, income: number}}[]{
       const firstDay = dayjs(this.now).subtract(dayjs(this.now).get('date') - 1, 'day');
       const array = [];
       for (let i = 0; i < dayjs(this.now).daysInMonth(); i++) {
@@ -85,9 +85,13 @@
         const found = this.renderList?.monthItems.find(item => item.day === dateString);
         array.push({key: dateString, value: found ? found.dayTotal : {expense: 0, income: 0}});
       }
-      const keys = array.map(item => dayjs(item.key).format('D日'));
-      const expenseValues = array.map(item => item.value.expense);
-      const incomeValues = array.map(item => item.value.income);
+      return array
+    }
+
+    get chartOptions(): EChartsOption {
+      const keys = this.keyValueList.map(item => dayjs(item.key).format('D日'));
+      const expenseValues = this.keyValueList.map(item => item.value.expense);
+      const incomeValues = this.keyValueList.map(item => item.value.income);
       return {
         grid: {
           height: '130px',
@@ -151,7 +155,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-
+        font-size: 14px;
         > span {
             > .expense {
                 color: #ef5155;
@@ -163,7 +167,7 @@
         }
     }
 
-    .histogramChart {
+    .chart {
         height: 160px;
 
         &_wrapper {
