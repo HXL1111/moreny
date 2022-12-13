@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 
 export default function monthGrouping(list:DayResult[]) {
   const result: MonthResult[] = [{
-    month:list[0].day,
+    month:dayjs(list[0].day).format('YYYY-MM'),
     monthTotal: {expense: 0, income: 0},
     monthItems: [list[0]]
   }];
