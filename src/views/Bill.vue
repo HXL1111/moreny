@@ -2,13 +2,14 @@
     <Layout>
         <div class="wrapper">
             <DateComponent @update:value="onUpdateMonth"/>
-            <div class="chart_wrapper">
-                <div class="amount">
-                    <span>月支出 <span class="expense">￥{{renderList[0]?.monthTotal?.expense||0}}</span></span>
-                    <span>月收入 <span class="income">￥{{renderList[0]?.monthTotal?.income||0}}</span></span>
-                </div>
-                <Chart class="chart" :options="chartOptions"/>
-            </div>
+            <Chart class="chart" :options="chartOptions">
+                <template v-slot:expense>
+                    ￥{{renderList[0]?.monthTotal?.expense||0}}
+                </template>
+                <template v-slot:income>
+                    ￥{{renderList[0]?.monthTotal?.income||0}}
+                </template>
+            </Chart>
         </div>
         <TagContent :render-list="renderList[0]?.monthItems || []">
             <template v-slot:title>
@@ -155,32 +156,9 @@
 </script>
 
 <style lang="scss" scoped>
-    .amount {
-        padding: 12px 12px 0 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 14px;
-
-        > span {
-            > .expense {
-                color: #ef5155;
-            }
-
-            > .income {
-                color: #509e6e;
-            }
-        }
-    }
 
     .chart {
-        height: 160px;
-
-        &_wrapper {
-            background: #252525;
-            margin: 16px;
-            border-radius: 10px;
-        }
+        height: 190px;
     }
 
     .wrapper {
