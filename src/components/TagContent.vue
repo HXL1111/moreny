@@ -138,6 +138,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            font-size: 12px;
         }
     }
 
@@ -203,6 +204,7 @@
                                     transform: scale(0.9);
                                     font-size: 12px;
                                     color: #c6c6c6;
+                                    margin-left: -3px;
                                 }
                             }
                         }

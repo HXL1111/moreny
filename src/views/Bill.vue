@@ -2,10 +2,11 @@
     <Layout>
         <div class="wrapper">
             <DateComponent @update:value="onUpdateMonth" class="month"/>
-            <Chart class="chart" :options="chartOptions" @update:isShowExpense="onUpdateExpense"
+            <Chart class="chart" :options="chartOptions"
+                   @update:isShowExpense="onUpdateExpense"
                    @update:isShowIncome="onUpdateIncome"
-                   :expense-class="{selected:Boolean(expenseVisible)}"
-                   :income-class="{selected: Boolean(incomeVisible)}">
+                   :expense-class="Boolean(expenseVisible)"
+                   :income-class="Boolean(incomeVisible)">
                 <template v-slot:expense>
                     ￥{{currentMonthList[0]?.monthTotal?.expense||0}}
                 </template>
@@ -27,7 +28,7 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import {Component, ProvideReactive} from 'vue-property-decorator';
   import Layout from '@/components/Layout.vue';
   import Histogram from '@/components/Chart.vue';
   import {EChartsOption} from 'echarts/types/dist/echarts';
@@ -46,7 +47,8 @@
   export default class Bill extends Vue {
     now: Date = new Date();
     expenseVisible: 0 | 1 = 1;
-    incomeVisible: 0 | 1 = 0;
+    incomeVisible: 0 | 1 = 1;
+    @ProvideReactive('isDateExist') isDateExist = true;
 
     onUpdateExpense(value: { expenseSelected: boolean }): void {
       if (value.expenseSelected) {
@@ -66,6 +68,7 @@
 
     onUpdateMonth(value: Date): void {
       this.now = value;
+      this.isDateExist = !!this.currentMonthList[0];
     }
 
     created(): void {

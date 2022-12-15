@@ -2,19 +2,22 @@
     <div class="chart_wrapper">
         <div class="amount">
             <span @click="expenseToggle"><span class="circle">
-                <span :class="{expenseClass,expenseType:type==='-'}"></span></span>月支出
+                <span :class="{selected:expenseClass}"></span></span>月支出
                 <span class="expense"><slot name="expense"/></span></span>
             <span @click="incomeToggle"><span class="circle">
-                <span :class="{incomeClass,incomeType:type==='+' }"></span></span>月收入
+                <span :class="{selected:incomeClass}"></span></span>月收入
                 <span class="income"><slot name="income"/></span></span>
         </div>
-        <div class="chart" ref="chart"></div>
+        <div v-show="this.isDataExist">
+            <div class="chart" ref="chart"></div>
+        </div>
+        <div v-show="this.isDataExist===false" class="emptyContent">本月没有发现账单哦</div>
     </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component, Prop, Watch} from 'vue-property-decorator';
+  import {Component, InjectReactive, Prop, Watch} from 'vue-property-decorator';
   import * as echarts from 'echarts';
   import {ECharts, EChartsOption} from 'echarts/types/dist/echarts';
 
@@ -24,8 +27,9 @@
   export default class Chart extends Vue {
     @Prop() options?: EChartsOption;
     @Prop() isRadio?: boolean;
-    @Prop() expenseClass?: string;
-    @Prop() incomeClass?: string;
+    @Prop() expenseClass?: boolean;
+    @Prop() incomeClass?: boolean;
+    @InjectReactive('isDateExist') isDataExist!: boolean;
 
     chart?: ECharts;
     type: '-' | '+' = '-';
@@ -34,17 +38,16 @@
 
     expenseToggle(): void {
       if (this.isRadio === true) {
-        this.type = '-'
+        this.type = '-';
         this.$emit('update:type', this.type);
       } else {
         this.expenseSelected = !this.expenseSelected;
         this.$emit('update:isShowExpense', {expenseSelected: this.expenseSelected});
       }
     }
-
     incomeToggle(): void {
       if (this.isRadio === true) {
-        this.type = '+'
+        this.type = '+';
         this.$emit('update:type', this.type);
       } else {
         this.incomeSelected = !this.incomeSelected;
@@ -98,12 +101,6 @@
                     &.selected {
                         background: white;
                     }
-                    &.expenseType{
-                        background: white;
-                    }
-                    &.incomeType{
-                        background: white;
-                    }
                 }
             }
 
@@ -118,7 +115,7 @@
     }
 
     .chart {
-        height: 400px;
+        height: 300px;
 
         &_wrapper {
             background: #252525;
@@ -126,4 +123,14 @@
             border-radius: 10px;
         }
     }
+
+    .emptyContent {
+        text-align: center;
+        height: 140px;
+        line-height: 140px;
+        font-size: 12px;
+
+    }
+
+
 </style>

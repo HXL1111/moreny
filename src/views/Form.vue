@@ -3,7 +3,9 @@
         <div class="wrapper">
             <DateComponent @update:value="onUpdateMonth"/>
             <Chart :options="chartOptions" :is-radio="true" class="chart"
-                   @update:type="onUpdateType">
+                   @update:type="onUpdateType"
+            :expense-class="type==='-'"
+            :income-class="type==='+'">
                 <template v-slot:expense>
                     ￥{{currentMonthList[0]?.monthTotal?.expense||0}}
                 </template>
@@ -22,7 +24,7 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import {Component, ProvideReactive} from 'vue-property-decorator';
   import Layout from '@/components/Layout.vue';
   import DateComponent from '@/components/DateComponent.vue';
   import Chart from '@/components/Chart.vue';
@@ -46,13 +48,15 @@
   export default class Form extends Vue {
     now: Date = new Date();
     type: '-' | '+' = '-';
-
+    @ProvideReactive('isDateExist') isDateExist = true;
     onUpdateType(value: '-' | '+'): void {
       this.type = value;
+      this.isDateExist = !!this.tagSortList[0];
     }
 
     onUpdateMonth(value: Date): void {
       this.now = value;
+      this.isDateExist = !!this.tagSortList[0];
     }
 
     created(): void {
@@ -131,65 +135,32 @@
       }
       return [];
     }
-
+    get chartDate():{value:number,name:string}[]{
+      return this.tagSortList.map(item=>{
+        return {value:item.amount,name:item.tagName}
+      })
+    }
     get chartOptions(): EChartsOption {
       return {
+        grid:{
+          top:'0'
+        },
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br> {b} ({d}%)'
+          formatter: '{b} <br/> ￥{c} ({d}%)'
         },
         series: [
           {
-            name: 'Access From',
             type: 'pie',
-            radius: ['40%', '70%'],
-            avoidLabelOverlap: false,
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 2
-            },
-            label: {
-              show: false,
-              position: 'center'
-            },
+            radius: '50%',
+            data: this.chartDate,
             emphasis: {
-              label: {
-                show: true,
-                fontSize: 40,
-                fontWeight: 'bold'
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
               }
-            },
-            labelLine: {
-              show: false
-            },
-            data: [
-              {value: 1048, name: 'Search Engine'},
-              {value: 735, name: 'Direct'},
-              {value: 580, name: 'El'},
-              {value: 484, name: 'UC'},
-              {value: 1048, name: 'A'},
-              {value: 735, name: 'C'},
-              {value: 580, name: 'Email'},
-              {value: 484, name: 'Union Ads'},
-              {value: 1048, name: 'Search Engine'},
-              {value: 735, name: 'Direct'},
-              {value: 580, name: 'El'},
-              {value: 484, name: 'UC'},
-              {value: 1048, name: 'A'},
-              {value: 735, name: 'C'},
-              {value: 580, name: 'Efil'},
-              {value: 484, name: 'Union Ads'},
-              {value: 1048, name: 'Search Engine'},
-              {value: 735, name: 'Diect'},
-              {value: 580, name: 'El'},
-              {value: 484, name: 'UC'},
-              {value: 1048, name: 'A'},
-              {value: 735, name: 'C'},
-              {value: 580, name: 'Eail'},
-              {value: 484, name: 'Ucion Ads'},
-              {value: 300, name: 'Video Ads'}
-            ]
+            }
           }
         ]
       };
