@@ -1,5 +1,5 @@
 type Tag = { id: string, name: string }
-
+type Total = { expense: number, income: number }
 type RecordItem = {
   tag: Tag[]
   type: string
@@ -9,12 +9,19 @@ type RecordItem = {
 
 type DayResult = {
   day: string,
-  dayTotal: { expense: number, income: number },
+  dayTotal: Total,
   dayItems: RecordItem[]
 }
 
 type MonthResult = {
   month: string,
-  monthTotal: { expense: number, income: number },
+  monthTotal: Total,
   monthItems: DayResult[]
+}
+
+type XList = {
+  month: string,
+  tag: Tag,
+  total: Total,
+  number: number
 }

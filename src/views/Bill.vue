@@ -5,14 +5,14 @@
             <Chart class="chart" :options="chartOptions" @update:isShowExpense="onUpdateExpense"
                    @update:isShowIncome="onUpdateIncome">
                 <template v-slot:expense>
-                    ￥{{renderList[0]?.monthTotal?.expense||0}}
+                    ￥{{currentMonthList[0]?.monthTotal?.expense||0}}
                 </template>
                 <template v-slot:income>
-                    ￥{{renderList[0]?.monthTotal?.income||0}}
+                    ￥{{currentMonthList[0]?.monthTotal?.income||0}}
                 </template>
             </Chart>
         </div>
-        <TagContent :render-list="renderList[0]?.monthItems || []">
+        <TagContent :render-list="currentMonthList[0]?.monthItems || []">
             <template v-slot:title>
                 账单明细
             </template>
@@ -76,24 +76,16 @@
     }
 
     // eslint-disable-next-line no-undef
-    get dayList(): DayResult[] {
+    get monthList(): MonthResult[] {
       const newList = _sort(this.recordList);
       if (newList.length === 0) {
         return [];
       }
-      return dayGrouping(newList);
+      return monthGrouping(clone(dayGrouping(newList)));
     }
 
     // eslint-disable-next-line no-undef
-    get monthList(): MonthResult[] {
-      if (this.dayList.length === 0) {
-        return [];
-      }
-      return monthGrouping(clone(this.dayList));
-    }
-
-    // eslint-disable-next-line no-undef
-    get renderList(): MonthResult[] {
+    get currentMonthList(): MonthResult[] {
       const renderItem = clone(this.monthList).filter(item => dayjs(item.month).isSame(this.now, 'month'));
       if (!renderItem) {
         return [];
@@ -107,7 +99,7 @@
       const array = [];
       for (let i = 0; i < dayjs(this.now).daysInMonth(); i++) {
         const dateString = dayjs(firstDay).add(i, 'day').format('YYYY-MM-DD');
-        const found = this.renderList[0]?.monthItems.find(item => item.day === dateString);
+        const found = this.currentMonthList[0]?.monthItems.find(item => item.day === dateString);
         array.push({key: dateString, value: found ? found.dayTotal : {expense: 0, income: 0}});
       }
       return array;
