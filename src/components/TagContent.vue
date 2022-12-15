@@ -213,6 +213,13 @@
                             display: flex;
                             align-items: flex-end;
                             flex-direction: column;
+                            &.red {
+                                color: #d75b5a;
+                            }
+
+                            &.green {
+                                color: #539f76;
+                            }
                             >.amount{
                                 &.red {
                                     color: #d75b5a;

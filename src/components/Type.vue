@@ -26,7 +26,9 @@
         throw new Error('type is unknown');
       }
       this.type = type;
-
+    }
+    created():void{
+      this.onTypeChanged(this.type)
     }
     @Watch('type')
     onTypeChanged(value:string): void{
