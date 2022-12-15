@@ -2,7 +2,8 @@
     <Layout>
         <div class="wrapper">
             <DateComponent @update:value="onUpdateMonth"/>
-            <Chart :options="chartOptions" class="chart">
+            <Chart :options="chartOptions" :is-radio="true" class="chart"
+                   @update:type="onUpdateType">
                 <template v-slot:expense>
                     ￥{{currentMonthList[0]?.monthTotal?.expense||0}}
                 </template>
@@ -11,7 +12,7 @@
                 </template>
             </Chart>
         </div>
-        <TagContent :render-list="currentMonthList[0]?.monthItems || []">
+        <TagContent :tag-sort-list="tagSortList" :type="type">
             <template v-slot:text>
                 <span>未发现账单哦，试着记一笔~</span>
             </template>
@@ -35,17 +36,19 @@
 
   type TagItem = {
     tagName: string,
-    tagTotal: {
-      expense: number,
-      income: number
-    },
-    number: number
+    amount: number,
+    number: number,
+    type: '-' | '+'
   }
   @Component({
     components: {TagContent, Chart, DateComponent, Layout}
   })
   export default class Form extends Vue {
     now: Date = new Date();
+    type: '-' | '+' = '-';
+    onUpdateType(value: '-'|'+'): void {
+     this.type = value
+    }
 
     onUpdateMonth(value: Date): void {
       this.now = value;
@@ -53,8 +56,6 @@
 
     created(): void {
       this.$store.commit('fetchRecord');
-      console.log('--------');
-      console.log(this.tagSortList);
     }
 
     // eslint-disable-next-line no-undef
@@ -97,41 +98,27 @@
             }
           }
         }
+        const newList = clone(array).filter(item => item.type === this.type);
         const firstTagItem: TagItem = {
-          tagName: array[0].tag[0].name,
-          tagTotal: {
-            expense: 0,
-            income: 0
-          },
-          number: 1
+          tagName: newList[0].tag[0].name,
+          amount: parseFloat(newList[0].notesAndAmount.amount),
+          number: 1,
+          type: this.type
         };
-        if (array[0].type === '-') {
-          firstTagItem.tagTotal.expense = parseFloat(array[0].notesAndAmount.amount);
-        } else {
-          firstTagItem.tagTotal.income = parseFloat(array[0].notesAndAmount.amount);
-        }
         const tags: TagItem[] = [firstTagItem];
-        for (let k = 1; k < array.length; k++) {
-          const currentTagName = array[k].tag[0].name;
-          const lastTagItem = tags[tags.length - 1];
-          if (currentTagName === lastTagItem.tagName) {
-            if (array[k].type === '-') {
-              lastTagItem.tagTotal.expense += parseFloat(array[k].notesAndAmount.amount);
-            } else {
-              lastTagItem.tagTotal.income += parseFloat(array[k].notesAndAmount.amount);
-            }
-            lastTagItem.number += 1;
+        for (let k = 1; k < newList.length; k++) {
+          const currentTagName = newList[k].tag[0].name;
+          const lastTag = tags[tags.length - 1];
+          if (currentTagName === lastTag.tagName) {
+            lastTag.amount += parseFloat(newList[k].notesAndAmount.amount);
+            lastTag.number += 1;
           } else {
             const currentTagItem = {
-              tagName: array[k].tag[0].name,
-              tagTotal: {expense: 0, income: 0},
-              number: 1
+              tagName: newList[k].tag[0].name,
+              amount: parseFloat(newList[k].notesAndAmount.amount),
+              number: 1,
+              type: this.type
             };
-            if (array[k].type === '-') {
-              currentTagItem.tagTotal.expense = parseFloat(array[k].notesAndAmount.amount);
-            } else {
-              currentTagItem.tagTotal.income = parseFloat(array[k].notesAndAmount.amount);
-            }
             tags.push(currentTagItem);
           }
         }

@@ -3,16 +3,8 @@
         <div class="threeDay">
             <slot name="title"/>
         </div>
-        <div v-if="!renderList[0]">
-            <div class="emptyContent">
-                <Icon name="emptyBill" class="icon"/>
-                <div class="text">
-                    <slot name="text"/>
-                </div>
-            </div>
-        </div>
-        <div v-for="(group,index) in renderList " :key="index" class="mainContent">
-            <div class="contentDiv">
+        <div v-if="renderList?.[0]" class="mainContent">
+            <div v-for="(group,index) in renderList " :key="index" class="contentDiv">
                 <div class="content-wrapper">
                     <div class="dateAndMoney">
                         <span>{{group.day}}</span>
@@ -39,6 +31,32 @@
                 </ol>
             </div>
         </div>
+        <div v-else-if="tagSortList?.[0]" class="mainContent">
+            <div v-for="(item,index) in tagSortList " :key="index" class="contentDiv">
+                <ol class="tagList">
+                    <li>
+                        <div class="tag-wrapper">
+                            <span class="logo">{{item.tagName.slice(0,1)}}</span>
+                            <div class="nameAndNotes">
+                                <span class="name">{{item.tagName}}</span>
+                            </div>
+                        </div>
+                        <div class="money">
+                            <span class="amount" :class="{red:item.type === '-',green:item.type === '+'}">￥{{item.amount}}</span>
+                            <span class="number">{{item.number}}笔</span>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div v-else>
+            <div class="emptyContent">
+                <Icon name="emptyBill" class="icon"/>
+                <div class="text">
+                    <slot name="text"/>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -47,10 +65,17 @@
   import {Component, Prop} from 'vue-property-decorator';
   import dayjs from 'dayjs';
 
+  type TagItem = {
+    tagName: string,
+    amount: number,
+    number: number
+  }
   @Component
   export default class TagContent extends Vue {
     // eslint-disable-next-line no-undef
-    @Prop() renderList: DayResult[] | undefined;
+    @Prop() renderList?: DayResult[];
+    @Prop() tagSortList?: TagItem[];
+    @Prop() type?: '-' | '+';
 
     // eslint-disable-next-line no-undef
     tagString(tag: Tag[]): string {
@@ -139,7 +164,6 @@
                             padding-left: $leftPadding;
                         }
                     }
-
                 }
 
                 > .tagList {
@@ -147,8 +171,9 @@
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
-                        margin-bottom: 16px;
-
+                        padding-bottom: 8px;
+                        margin-bottom: 8px;
+                        border-bottom: 1px solid #252525;
                         > .tag-wrapper {
                             display: flex;
                             align-items: center;
@@ -183,12 +208,20 @@
                         }
 
                         > .money {
-                            &.red {
-                                color: #d75b5a;
-                            }
+                            display: flex;
+                            align-items: flex-end;
+                            flex-direction: column;
+                            >.amount{
+                                &.red {
+                                    color: #d75b5a;
+                                }
 
-                            &.green {
-                                color: #539f76;
+                                &.green {
+                                    color: #539f76;
+                                }
+                            }
+                            >.number{
+                                font-size: 12px;
                             }
                         }
                     }

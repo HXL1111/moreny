@@ -3,7 +3,9 @@
         <div class="wrapper">
             <DateComponent @update:value="onUpdateMonth" class="month"/>
             <Chart class="chart" :options="chartOptions" @update:isShowExpense="onUpdateExpense"
-                   @update:isShowIncome="onUpdateIncome">
+                   @update:isShowIncome="onUpdateIncome"
+                   :expense-class="{selected:Boolean(expenseVisible)}"
+                   :income-class="{selected: Boolean(incomeVisible)}">
                 <template v-slot:expense>
                     ￥{{currentMonthList[0]?.monthTotal?.expense||0}}
                 </template>
@@ -43,8 +45,8 @@
   })
   export default class Bill extends Vue {
     now: Date = new Date();
-    expenseVisible:0|1 = 1;
-    incomeVisible: 0|1 = 0;
+    expenseVisible: 0 | 1 = 1;
+    incomeVisible: 0 | 1 = 0;
 
     onUpdateExpense(value: { expenseSelected: boolean }): void {
       if (value.expenseSelected) {

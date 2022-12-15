@@ -1,11 +1,12 @@
 <template>
     <div class="chart_wrapper">
         <div class="amount">
-            <span @click="expenseToggle"><span class="circle"><span :class="{selected:expenseSelected}"></span></span>月支出 <span
-                    class="expense"><slot name="expense"/></span></span>
-            <span @click="incomeToggle"><span class="circle"><span :class="{selected:incomeSelected}"></span></span>月收入 <span
-                    class="income"><slot
-                    name="income"/></span></span>
+            <span @click="expenseToggle"><span class="circle">
+                <span :class="{expenseClass,expenseType:type==='-'}"></span></span>月支出
+                <span class="expense"><slot name="expense"/></span></span>
+            <span @click="incomeToggle"><span class="circle">
+                <span :class="{incomeClass,incomeType:type==='+' }"></span></span>月收入
+                <span class="income"><slot name="income"/></span></span>
         </div>
         <div class="chart" ref="chart"></div>
     </div>
@@ -22,18 +23,33 @@
   })
   export default class Chart extends Vue {
     @Prop() options?: EChartsOption;
+    @Prop() isRadio?: boolean;
+    @Prop() expenseClass?: string;
+    @Prop() incomeClass?: string;
+
     chart?: ECharts;
+    type: '-' | '+' = '-';
     expenseSelected = true;
     incomeSelected = false;
 
     expenseToggle(): void {
-      this.expenseSelected = !this.expenseSelected;
-      this.$emit('update:isShowExpense', {expenseSelected: this.expenseSelected});
+      if (this.isRadio === true) {
+        this.type = '-'
+        this.$emit('update:type', this.type);
+      } else {
+        this.expenseSelected = !this.expenseSelected;
+        this.$emit('update:isShowExpense', {expenseSelected: this.expenseSelected});
+      }
     }
 
     incomeToggle(): void {
-      this.incomeSelected = !this.incomeSelected;
-      this.$emit('update:isShowIncome', {incomeSelected: this.incomeSelected});
+      if (this.isRadio === true) {
+        this.type = '+'
+        this.$emit('update:type', this.type);
+      } else {
+        this.incomeSelected = !this.incomeSelected;
+        this.$emit('update:isShowIncome', {incomeSelected: this.incomeSelected});
+      }
     }
 
     mounted(): void | Error {
@@ -80,6 +96,12 @@
                     border-radius: 50%;
 
                     &.selected {
+                        background: white;
+                    }
+                    &.expenseType{
+                        background: white;
+                    }
+                    &.incomeType{
                         background: white;
                     }
                 }

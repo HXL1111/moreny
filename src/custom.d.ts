@@ -18,10 +18,3 @@ type MonthResult = {
   monthTotal: Total,
   monthItems: DayResult[]
 }
-
-type XList = {
-  month: string,
-  tag: Tag,
-  total: Total,
-  number: number
-}
