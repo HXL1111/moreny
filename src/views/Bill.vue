@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout class="layout">
         <div class="wrapper">
             <DateComponent @update:value="onUpdateMonth" class="month"/>
             <Chart class="chart" :options="chartOptions"
@@ -181,8 +181,8 @@
     .chart {
         height: 190px;
     }
-
-    .wrapper {
+.layout{
+   > .wrapper {
         color: #FFFFFF;
         position: relative;
 
@@ -192,4 +192,6 @@
             z-index: 100;
         }
     }
+}
+
 </style>

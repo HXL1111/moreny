@@ -8,7 +8,6 @@
         <router-link class="tag-wrapper"
                      :to="`/home/money/label/${tag.id}`"
                      v-for="tag in tags" :key="tag.id">
-
             <div class="tag">
                 <span class="logo">{{tag.name.slice(0,1)}}</span>
                 <span class="name">{{tag.name}}</span>
@@ -26,9 +25,10 @@
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import Icon from '@/components/Icon.vue';
+  import Button from '@/components/Button.vue';
 
   @Component({
-    components: {Icon}
+    components: {Icon, Button}
   })
   export default class editLabel extends Vue {
 
@@ -59,18 +59,15 @@
         color: $color-highLight;
         display: flex;
         flex-direction: column;
-        height: 100vh;
+        height: 100%;
 
         .navBar {
-
             text-align: center;
             font-size: 16px;
             padding: 12px 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-
             > .leftIcon {
                 width: 20px;
                 height: 20px;
@@ -118,15 +115,6 @@
         .createTag-wrapper {
             text-align: center;
             padding: 14px 0;
-
-            > button {
-                padding: 14px 0;
-                width: 90vw;
-                color: $color-highLight;
-                border: none;
-                background: $color-background;
-                border-radius: 16px;
-            }
         }
     }
 

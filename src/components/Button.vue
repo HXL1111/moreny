@@ -1,6 +1,6 @@
 <template>
         <div class="makeAccount" @click="$emit('click',$event)">
-            <button>
+            <button >
                 <slot/>
             </button>
         </div>
@@ -21,10 +21,10 @@
     .makeAccount {
         text-align: center;
         padding: 14px 0;
-
+        margin: 0 14px;
         > button {
             padding: 14px 0;
-            width: 90vw;
+            width: 100%;
             color: $color-highLight;
             border: none;
             background: $color-background;

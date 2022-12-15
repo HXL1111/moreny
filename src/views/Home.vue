@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout class="layout">
         <AmountDisplay/>
         <router-link to="/home/money">
             <Button>记一笔</Button>
@@ -50,5 +50,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+.layout{
+    overflow: auto;
+}
 </style>
