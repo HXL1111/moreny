@@ -46,8 +46,9 @@
   export default class Form extends Vue {
     now: Date = new Date();
     type: '-' | '+' = '-';
-    onUpdateType(value: '-'|'+'): void {
-     this.type = value
+
+    onUpdateType(value: '-' | '+'): void {
+      this.type = value;
     }
 
     onUpdateMonth(value: Date): void {
@@ -83,46 +84,50 @@
     }
 
     get tagSortList(): TagItem[] {
-      const currentMonthItem = clone(this.currentMonthList)[0].monthItems;
-      if (currentMonthItem) {
-        const array = [];
-        for (let i = 0; i < currentMonthItem.length; i++) {
-          for (let j = 0; j < currentMonthItem[i].dayItems.length; j++) {
-            const currentTag = currentMonthItem[i].dayItems[j];
-            const currentTagName = currentTag.tag[0].name;
-            if (array.map(item => item?.tag[0].name).indexOf(currentTagName) >= 0) {
-              const lastIndex = array.map(item => item?.tag[0].name).lastIndexOf(currentTagName);
-              array.splice(lastIndex, 0, currentTag);
-            } else {
-              array.push(currentTag);
+      if (this.currentMonthList[0]) {
+        const currentMonthItem = clone(this.currentMonthList)[0].monthItems;
+        if (currentMonthItem) {
+          const array = [];
+          for (let i = 0; i < currentMonthItem.length; i++) {
+            for (let j = 0; j < currentMonthItem[i].dayItems.length; j++) {
+              const currentTag = currentMonthItem[i].dayItems[j];
+              const currentTagName = currentTag.tag[0].name;
+              if (array.map(item => item?.tag[0].name).indexOf(currentTagName) >= 0) {
+                const lastIndex = array.map(item => item?.tag[0].name).lastIndexOf(currentTagName);
+                array.splice(lastIndex, 0, currentTag);
+              } else {
+                array.push(currentTag);
+              }
             }
           }
-        }
-        const newList = clone(array).filter(item => item.type === this.type);
-        const firstTagItem: TagItem = {
-          tagName: newList[0].tag[0].name,
-          amount: parseFloat(newList[0].notesAndAmount.amount),
-          number: 1,
-          type: this.type
-        };
-        const tags: TagItem[] = [firstTagItem];
-        for (let k = 1; k < newList.length; k++) {
-          const currentTagName = newList[k].tag[0].name;
-          const lastTag = tags[tags.length - 1];
-          if (currentTagName === lastTag.tagName) {
-            lastTag.amount += parseFloat(newList[k].notesAndAmount.amount);
-            lastTag.number += 1;
-          } else {
-            const currentTagItem = {
-              tagName: newList[k].tag[0].name,
-              amount: parseFloat(newList[k].notesAndAmount.amount),
+          const newList = clone(array).filter(item => item.type === this.type);
+          if (newList[0]) {
+            const firstTagItem: TagItem = {
+              tagName: newList[0].tag[0].name,
+              amount: parseFloat(newList[0]?.notesAndAmount.amount),
               number: 1,
               type: this.type
             };
-            tags.push(currentTagItem);
+            const tags: TagItem[] = [firstTagItem];
+            for (let k = 1; k < newList.length; k++) {
+              const currentTagName = newList[k].tag[0].name;
+              const lastTag = tags[tags.length - 1];
+              if (currentTagName === lastTag.tagName) {
+                lastTag.amount += parseFloat(newList[k].notesAndAmount.amount);
+                lastTag.number += 1;
+              } else {
+                const currentTagItem = {
+                  tagName: newList[k].tag[0].name,
+                  amount: parseFloat(newList[k].notesAndAmount.amount),
+                  number: 1,
+                  type: this.type
+                };
+                tags.push(currentTagItem);
+              }
+            }
+            return tags;
           }
         }
-        return tags;
       }
       return [];
     }
