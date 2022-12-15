@@ -1,5 +1,5 @@
 <template>
-    <Layout class="layout">
+    <Layout id ='layout' class="layout">
         <AmountDisplay/>
         <router-link to="/home/money">
             <Button>记一笔</Button>
@@ -34,6 +34,7 @@
     created(): void {
       this.$store.commit('fetchRecord');
     }
+
     // eslint-disable-next-line no-undef
     get recordList(): RecordItem[] {
       return this.$store.state.recordList;
