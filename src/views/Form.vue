@@ -4,8 +4,8 @@
             <DateComponent @update:value="onUpdateMonth"/>
             <Chart :options="chartOptions" :is-radio="true" class="chart"
                    @update:type="onUpdateType"
-            :expense-class="type==='-'"
-            :income-class="type==='+'">
+                   :expense-class="type==='-'"
+                   :income-class="type==='+'">
                 <template v-slot:expense>
                     ￥{{currentMonthList[0]?.monthTotal?.expense||0}}
                 </template>
@@ -49,6 +49,7 @@
     now: Date = new Date();
     type: '-' | '+' = '-';
     @ProvideReactive('isDateExist') isDateExist = true;
+
     onUpdateType(value: '-' | '+'): void {
       this.type = value;
       this.isDateExist = !!this.tagSortList[0];
@@ -59,8 +60,13 @@
       this.isDateExist = !!this.tagSortList[0];
     }
 
+    beforeCreated(): void {
+      this.isDateExist = false;
+    }
+
     created(): void {
       this.$store.commit('fetchRecord');
+      this.isDateExist = !!this.tagSortList[0];
     }
 
     // eslint-disable-next-line no-undef
@@ -135,15 +141,17 @@
       }
       return [];
     }
-    get chartDate():{value:number,name:string}[]{
-      return this.tagSortList.map(item=>{
-        return {value:item.amount,name:item.tagName}
-      })
+
+    get chartDate(): { value: number, name: string }[] {
+      return this.tagSortList.map(item => {
+        return {value: item.amount, name: item.tagName};
+      });
     }
+
     get chartOptions(): EChartsOption {
       return {
-        grid:{
-          top:'0'
+        grid: {
+          top: '0'
         },
         tooltip: {
           trigger: 'item',

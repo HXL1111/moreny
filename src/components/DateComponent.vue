@@ -29,7 +29,8 @@
   export default class DateComponent extends Vue {
 
     now = new Date();
-    lastTime = this.now ;
+    lastTime = this.now;
+
     get currentDate(): string {
       return dayjs(this.now).format('YYYY年MM月');
     }
@@ -45,7 +46,7 @@
     }
 
     hideDatePicker(): void {
-      this.lastTime = this.now
+      this.lastTime = this.now;
       this.visible = false;
     }
 
@@ -53,7 +54,7 @@
       this.now = date;
       this.lastTime = this.now;
       this.hideDatePicker();
-      this.$emit('update:value',this.now)
+      this.$emit('update:value', this.now);
     }
   }
 </script>
@@ -62,6 +63,7 @@
     .wrapper {
         padding: 16px 0;
         background: #0f0f0f;
+
         > .date {
             padding-left: 16px;
         }

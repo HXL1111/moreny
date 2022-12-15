@@ -71,8 +71,13 @@
       this.isDateExist = !!this.currentMonthList[0];
     }
 
+    beforeCreated(): void {
+      this.isDateExist = false;
+    }
+
     created(): void {
       this.$store.commit('fetchRecord');
+      this.isDateExist = !!this.currentMonthList[0];
     }
 
     // eslint-disable-next-line no-undef

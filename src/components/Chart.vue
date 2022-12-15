@@ -9,7 +9,7 @@
                 <span class="income"><slot name="income"/></span></span>
         </div>
         <div v-show="this.isDataExist">
-            <div class="chart" ref="chart"></div>
+            <div class="chart" :class="{visible:!isDataExist}" ref="chart"></div>
         </div>
         <div v-show="this.isDataExist===false" class="emptyContent">本月没有发现账单哦</div>
     </div>
@@ -45,6 +45,7 @@
         this.$emit('update:isShowExpense', {expenseSelected: this.expenseSelected});
       }
     }
+
     incomeToggle(): void {
       if (this.isRadio === true) {
         this.type = '+';
@@ -132,5 +133,8 @@
 
     }
 
+    .visible {
+        display: none;
+    }
 
 </style>
