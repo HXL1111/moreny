@@ -1,6 +1,6 @@
 <template>
     <Layout>
-        <div class="wrapper">
+        <div>
             <DateComponent @update:value="onUpdateMonth"/>
             <Chart :options="chartOptions" :is-radio="true" class="chart"
                    @update:type="onUpdateType"
@@ -177,8 +177,5 @@
 </script>
 
 <style lang="scss" scoped>
-    .wrapper {
-        color: #FFFFFF;
-    }
 
 </style>

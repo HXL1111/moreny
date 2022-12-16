@@ -177,21 +177,7 @@
 </script>
 
 <style lang="scss" scoped>
-
     .chart {
         height: 190px;
     }
-
-   > .wrapper {
-        color: #FFFFFF;
-        position: relative;
-
-        > .month {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-    }
-
-
 </style>
