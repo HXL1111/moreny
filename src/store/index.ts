@@ -46,9 +46,11 @@ const store = new Vuex.Store({
       window.localStorage.setItem('tagList', JSON.stringify(state.tagList));
     },
     createTag(state) {
-      const name = window.prompt('请输入标签名');
+      const name = window.prompt('请输入标签名(少于四个字符)');
       const names = state.tagList.map(item => item.name);
       if (name) {
+        if (name.length > 4) {return window.alert('不能超过四个字符');}
+        console.log(name.length)
         if (names.indexOf(name) >= 0) {
           window.alert('已创建相同的标签');
         } else {
@@ -59,7 +61,6 @@ const store = new Vuex.Store({
           window.alert('添加成功');
         }
       }
-
     },
     updateTag(state, payload: { id: string, name: string }) {
       const {id, name} = payload;

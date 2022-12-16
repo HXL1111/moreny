@@ -14,7 +14,6 @@
             </div>
             <Icon name="right"/>
         </router-link>
-
         <div class="createTag-wrapper">
             <Button @click="createTag">新建标签</Button>
         </div>
@@ -59,7 +58,7 @@
         color: $color-highLight;
         display: flex;
         flex-direction: column;
-        height: 100%;
+        min-height: 100vh;
 
         .navBar {
             text-align: center;
@@ -96,7 +95,8 @@
 
             > .tag {
                 display: flex;
-
+                justify-content: center;
+                align-items: center;
                 > .logo {
                     background: #515151;
                     text-align: center;
@@ -106,7 +106,6 @@
                 }
 
                 > .name {
-                    @extend %font;
                     padding-left: $leftPadding;
                 }
             }
