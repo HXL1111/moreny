@@ -63,7 +63,7 @@
     .wrapper {
         padding: 16px 0;
         background: #0f0f0f;
-
+        color: white;
         > .date {
             padding-left: 16px;
         }

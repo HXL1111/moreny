@@ -181,7 +181,7 @@
     .chart {
         height: 190px;
     }
-.layout{
+
    > .wrapper {
         color: #FFFFFF;
         position: relative;
@@ -192,6 +192,6 @@
             z-index: 100;
         }
     }
-}
+
 
 </style>

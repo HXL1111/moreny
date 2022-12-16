@@ -79,7 +79,7 @@
         justify-content: space-between;
         align-items: center;
         font-size: 14px;
-
+        color: #FFFFFF;
         > span {
             display: flex;
             justify-content: center;
