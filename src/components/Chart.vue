@@ -9,7 +9,7 @@
                 <span class="income"><slot name="income"/></span></span>
         </div>
         <div v-show="this.isDataExist">
-            <div class="chart" :class="{visible:!isDataExist}" ref="chart"></div>
+            <div class="chart" ref="chart"></div>
         </div>
         <div v-show="this.isDataExist===false" class="emptyContent">本月没有发现账单哦</div>
     </div>
@@ -20,6 +20,7 @@
   import {Component, InjectReactive, Prop, Watch} from 'vue-property-decorator';
   import * as echarts from 'echarts';
   import {ECharts, EChartsOption} from 'echarts/types/dist/echarts';
+
 
   @Component({
     components: {echarts}
@@ -55,7 +56,11 @@
         this.$emit('update:isShowIncome', {incomeSelected: this.incomeSelected});
       }
     }
-
+    created():void{
+      if(!this.isDataExist){
+        this.$emit('update:type', '+');
+      }
+    }
     mounted(): void | Error {
       if (this.options === undefined) {
         return new Error('options 不存在');
@@ -64,6 +69,7 @@
         this.chart.setOption(this.options);
       }
     }
+
 
     @Watch('options')
     onOptionsChange(newValue: EChartsOption): void {

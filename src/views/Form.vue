@@ -67,6 +67,7 @@
     created(): void {
       this.$store.commit('fetchRecord');
       this.isDateExist = !!this.tagSortList[0];
+      console.log(this.isDateExist)
     }
 
     // eslint-disable-next-line no-undef
