@@ -189,8 +189,10 @@
 
                             > .logo {
                                 background: #515151;
-                                text-align: center;
                                 font-size: 15px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
                                 @extend %font;
                                 border-radius: 50%;
                             }
